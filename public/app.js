@@ -1,5 +1,7 @@
 // Frontend JavaScript for sortable table
-const API_URL = 'http://localhost:3000/api/stats';
+const API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api/stats'
+  : '/api/stats'; // Use relative URL in production
 
 let statsData = [];
 let columnLabels = {};
