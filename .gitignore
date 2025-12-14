@@ -1,0 +1,18 @@
+# Node modules
+node_modules/
+
+# Output files
+output/*.json
+
+# Environment variables
+.env
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conference Stats</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Conference Statistics</h1>
+      <div class="header-info">
+        <select id="splitSelector">
+          <option value="conference">Conference Stats</option>
+          <option value="overall">Overall Stats</option>
+        </select>
+        <span id="lastUpdated">Loading...</span>
+        <button id="refreshBtn">Refresh Data</button>
+      </div>
+    </header>
+
+    <div id="loading" class="loading">Loading data...</div>
+    <div id="error" class="error" style="display: none;"></div>
+
+    <div class="table-container">
+      <table id="statsTable">
+        <thead>
+          <tr id="tableHeader">
+            <!-- Headers will be generated dynamically -->
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Data will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="app.js?v=5"></script>
+</body>
+</html>
