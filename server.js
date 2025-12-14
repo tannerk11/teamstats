@@ -7,7 +7,7 @@ import { calculateCustomStats } from './lib/calculator.js';
 import { COLUMN_LABELS } from './lib/columnLabels.js';
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Enable CORS for frontend access
 app.use(cors());
