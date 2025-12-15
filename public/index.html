@@ -5,16 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Conference Stats</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>Conference Statistics</h1>
       <div class="header-info">
-        <select id="splitSelector">
-          <option value="conference">Conference Stats</option>
-          <option value="overall">Overall Stats</option>
-        </select>
         <span id="lastUpdated">Loading...</span>
         <button id="refreshBtn">Refresh Data</button>
       </div>
@@ -23,11 +20,43 @@
     <div id="loading" class="loading">Loading data...</div>
     <div id="error" class="error" style="display: none;"></div>
 
-    <div class="table-container">
-      <table id="statsTable">
-        <thead>
-          <tr id="tableHeader">
-            <!-- Headers will be generated dynamically -->
+    <div class="table-controls">
+      <select id="splitSelector">
+        <option value="conference">Conference Stats</option>
+        <option value="overall">Overall Stats</option>
+      </select>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+      <div class="chart-container">
+        <div class="chart-header">
+          <h2 id="chartTitle">Net Points Per Possession (PPP)</h2>
+          <select id="chartStatSelector">
+            <option value="netPointsPerPossession">Net PPP</option>
+            <option value="pointsPerPossession">Offensive PPP</option>
+            <option value="oppPointsPerPossession">Defensive PPP (Opp)</option>
+            <option value="efgPct">Effective FG%</option>
+            <option value="toPct">Turnover %</option>
+            <option value="orPct">Offensive Rebound %</option>
+            <option value="ftRate">FT Rate %</option>
+            <option value="shotVolume">Shot Volume</option>
+            <option value="ptspg">Points Per Game</option>
+            <option value="fgpt">FG%</option>
+            <option value="fgpt3">3PT%</option>
+            <option value="ftpt">FT%</option>
+          </select>
+        </div>
+        <canvas id="statsChart"></canvas>
+      </div>
+    </div>
+
+    <div class="table-outside">
+      <div class="table-container">
+        <table id="statsTable">
+          <thead>
+            <tr id="tableHeader">
+              <!-- Headers will be generated dynamically -->
           </tr>
         </thead>
         <tbody id="tableBody">
@@ -37,6 +66,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

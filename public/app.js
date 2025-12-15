@@ -8,6 +8,8 @@ let columnLabels = {};
 let currentSort = { column: null, direction: 'asc' };
 let currentColumns = []; // Store the current column order
 let currentSplit = 'conference'; // Current split type
+let statsChart = null; // Store chart instance
+let currentChartStat = 'netPointsPerPossession'; // Current stat to display
 
 // Fetch data from API
 async function fetchStats(split = currentSplit) {
@@ -28,6 +30,7 @@ async function fetchStats(split = currentSplit) {
       columnLabels = result.columnLabels || {};
       updateLastUpdated(result.lastUpdated);
       renderTable();
+      renderCharts();
       loading.style.display = 'none';
       tableContainer.style.display = 'block';
     } else {
@@ -67,8 +70,10 @@ function renderTable() {
   // To show all columns, set columnsToShow = null
   // To show specific columns, list them here:
   const columnsToShow = [
-  'teamName', 'gp', 'pts', 'ptspg', 'fgpt', 'fgpt3', 'ftpt', 
-  'treb', 'trebpg', 'ast', 'astpg', 'to', 'topg', 'stl', 'blk', 'possessionsPerGame'
+  'teamName', 'gp', 'pts', 'ptspg', 'pointsPerPossession', 'possessionsPerGame', 
+  'ptspgopp', 'oppPointsPerPossession', 'oppPossessionsPerGame', 'netPointsPerPossession',
+  'efgPct', 'toPct', 'orPct', 'ftRate', 'shotVolume',
+  'fgpt', 'fgpt3', 'ftpt', 'treb', 'trebpg', 'ast', 'astpg', 'to', 'topg', 'stl', 'blk'
 ];
   
   // Filter and order columns
@@ -109,7 +114,7 @@ function renderTableBody(columns) {
   tbody.innerHTML = statsData.map(team => {
     const cells = columns.map(col => {
       const value = team[col];
-      const formatted = formatValue(value);
+      const formatted = formatValue(value, col);
       const cellClass = col === 'teamName' ? 'team-name' : '';
       return `<td class="${cellClass}">${formatted}</td>`;
     }).join('');
@@ -178,11 +183,42 @@ function getColumnLabel(columnKey) {
 }
 
 // Format cell values
-function formatValue(value) {
+function formatValue(value, columnKey) {
   if (value == null) return '-';
+  
+  // Check if this is points per possession or Shot Volume (needs 3 decimals)
+  const isThreeDecimals = columnKey && (
+    columnKey === 'pointsPerPossession' || 
+    columnKey === 'oppPointsPerPossession' ||
+    columnKey === 'netPointsPerPossession' ||
+    columnKey === 'shotVolume'
+  );
+  
+  // Check if this is a percentage field (needs % symbol)
+  const isPercentage = columnKey && (
+    columnKey.includes('fgpt') || 
+    columnKey.includes('ftpt') || 
+    columnKey.toLowerCase().includes('pct') ||
+    columnKey.toLowerCase().includes('rate')
+  );
+  
+  // Check if this is per game stat (needs 1 decimal)
+  const isPerGame = columnKey && (
+    columnKey.includes('pg') || 
+    columnKey.includes('pm')
+  );
   
   // If it's already a number, format it
   if (typeof value === 'number') {
+    if (isThreeDecimals) {
+      return value.toFixed(3);
+    }
+    if (isPercentage) {
+      return value.toFixed(1) + '%';
+    }
+    if (isPerGame) {
+      return value.toFixed(1);
+    }
     return value.toFixed(2);
   }
   
@@ -194,7 +230,19 @@ function formatValue(value) {
     
     // If it's a valid number, format it nicely
     if (!isNaN(numValue)) {
-      // For whole numbers, don't show decimals
+      // Check if this needs 3 decimals
+      if (isThreeDecimals) {
+        return numValue.toFixed(3);
+      }
+      // Check if this is a percentage field
+      if (isPercentage) {
+        return numValue.toFixed(1) + '%';
+      }
+      // Check if this is per game stat
+      if (isPerGame) {
+        return numValue.toFixed(1);
+      }
+      // For whole numbers, don't show decimals (unless per game)
       if (Number.isInteger(numValue)) {
         return numValue.toLocaleString();
       }
@@ -205,6 +253,141 @@ function formatValue(value) {
   
   // Otherwise return as-is
   return value;
+}
+
+// Render Charts
+function renderCharts() {
+  renderStatsChart(currentChartStat);
+}
+
+// Render Dynamic Stats Bar Chart
+function renderStatsChart(statKey) {
+  const ctx = document.getElementById('statsChart');
+  if (!ctx) return;
+  
+  // Destroy existing chart if it exists
+  if (statsChart) {
+    statsChart.destroy();
+  }
+  
+  // Get stat label
+  const statLabel = columnLabels[statKey] || statKey;
+  
+  // Update chart title
+  document.getElementById('chartTitle').textContent = statLabel;
+  
+  // Sort teams by selected stat (descending)
+  const sortedData = [...statsData].sort((a, b) => {
+    const aVal = parseFloat(a[statKey]) || 0;
+    const bVal = parseFloat(b[statKey]) || 0;
+    return bVal - aVal;
+  });
+  
+  const labels = sortedData.map(team => team.teamName);
+  const data = sortedData.map(team => parseFloat(team[statKey]) || 0);
+  
+  // Determine if this stat can be negative (only Net PPP for now)
+  const canBeNegative = statKey === 'netPointsPerPossession';
+  
+  // Color bars based on positive/negative values or use gradient
+  let backgroundColors, borderColors;
+  if (canBeNegative) {
+    backgroundColors = data.map(value => 
+      value >= 0 ? 'rgba(34, 197, 94, 0.8)' : 'rgba(239, 68, 68, 0.8)'
+    );
+    borderColors = data.map(value => 
+      value >= 0 ? 'rgba(34, 197, 94, 1)' : 'rgba(239, 68, 68, 1)'
+    );
+  } else {
+    // Use gradient from best to worst
+    backgroundColors = data.map((value, index) => {
+      const ratio = index / (data.length - 1);
+      return `rgba(0, 49, 110, ${0.9 - ratio * 0.5})`;
+    });
+    borderColors = data.map((value, index) => {
+      const ratio = index / (data.length - 1);
+      return `rgba(0, 49, 110, ${1 - ratio * 0.3})`;
+    });
+  }
+  
+  // Determine decimal places for tooltip
+  const isPercentage = statKey.toLowerCase().includes('pct') || 
+                       statKey.toLowerCase().includes('rate') || 
+                       statKey.includes('fgpt') || 
+                       statKey.includes('ftpt');
+  const is3Decimals = ['pointsPerPossession', 'oppPointsPerPossession', 'netPointsPerPossession', 'shotVolume'].includes(statKey);
+  
+  statsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: statLabel,
+        data: data,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              let value = context.parsed.y;
+              if (is3Decimals) {
+                value = value.toFixed(3);
+              } else if (isPercentage) {
+                value = value.toFixed(1) + '%';
+              } else {
+                value = value.toFixed(1);
+              }
+              return `${statLabel}: ${value}`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: statLabel,
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          },
+          ticks: {
+            callback: function(value) {
+              if (isPercentage) {
+                return value.toFixed(0) + '%';
+              }
+              return value;
+            }
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            font: {
+              size: 11
+            }
+          }
+        }
+      }
+    }
+  });
 }
 
 // Auto-refresh at midnight
@@ -227,6 +410,10 @@ document.getElementById('refreshBtn').addEventListener('click', () => fetchStats
 document.getElementById('splitSelector').addEventListener('change', (e) => {
   currentSplit = e.target.value;
   fetchStats(currentSplit);
+});
+document.getElementById('chartStatSelector').addEventListener('change', (e) => {
+  currentChartStat = e.target.value;
+  renderStatsChart(currentChartStat);
 });
 fetchStats();
 scheduleNextRefresh();

@@ -20,6 +20,7 @@ async function main() {
   statistics.forEach(stat => {
     console.log(`\n${stat.teamName}:`);
     console.log(`  Possessions Per Game: ${stat.possessionsPerGame.toFixed(2)}`);
+    console.log(`  Available opponent stats:`, Object.keys(stat).filter(k => k.toLowerCase().includes('opp')).join(', '));
   });
   
   // Step 4: Save results to file (optional)
