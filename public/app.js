@@ -72,6 +72,7 @@ function renderTable() {
   const columnsToShow = [
   'teamName', 'gp', 'pts', 'ptspg', 'pointsPerPossession', 'possessionsPerGame', 
   'ptspgopp', 'oppPointsPerPossession', 'oppPossessionsPerGame', 'netPointsPerPossession',
+  'offensiveRating', 'defensiveRating',
   'efgPct', 'toPct', 'orPct', 'ftRate', 'shotVolume',
   'fgpt', 'fgpt3', 'ftpt', 'treb', 'trebpg', 'ast', 'astpg', 'to', 'topg', 'stl', 'blk'
 ];
