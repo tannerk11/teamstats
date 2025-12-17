@@ -70,11 +70,15 @@ function renderTable() {
   // To show all columns, set columnsToShow = null
   // To show specific columns, list them here:
   const columnsToShow = [
-  'teamName', 'gp', 'pts', 'ptspg', 'pointsPerPossession', 'possessionsPerGame', 
+  'teamName', 'record', 'gp', 'ptspg', 'pointsPerPossession', 'possessionsPerGame', 
   'ptspgopp', 'oppPointsPerPossession', 'oppPossessionsPerGame', 'netPointsPerPossession',
   'offensiveRating', 'defensiveRating',
   'efgPct', 'toPct', 'orPct', 'ftRate', 'shotVolume',
-  'fgpt', 'fgpt3', 'ftpt', 'treb', 'trebpg', 'ast', 'astpg', 'to', 'topg', 'stl', 'blk'
+  'fgpt', 'fgpt3', 'ftpt', 
+  'ptspaintpg', 'ptspaintpgopp', 'ptsbenchpg', 'ptsbenchpgopp', 
+  'ptsfastbpg', 'ptsfastbpgopp', 'ptstopg', 'ptstopgopp',
+  'ptsch2pg', 'ptsch2pgopp',
+  'trebpg', 'drebpg', 'orebpg', 'astpg', 'topg', 'stlpg', 'blkpg'
 ];
   
   // Filter and order columns
@@ -147,6 +151,12 @@ function sortTable(column) {
     let aVal = a[column];
     let bVal = b[column];
     
+    // Special handling for record column - sort by wins
+    if (column === 'record') {
+      aVal = a['wins'] || 0;
+      bVal = b['wins'] || 0;
+    }
+    
     // Remove commas from strings and convert to numbers if possible
     if (typeof aVal === 'string') {
       const cleanA = parseFloat(aVal.replace(/,/g, ''));
@@ -186,6 +196,11 @@ function getColumnLabel(columnKey) {
 // Format cell values
 function formatValue(value, columnKey) {
   if (value == null) return '-';
+  
+  // Return certain fields as-is (like win-loss record)
+  if (columnKey === 'record' || columnKey === 'wins' || columnKey === 'losses') {
+    return value;
+  }
   
   // Check if this is points per possession or Shot Volume (needs 3 decimals)
   const isThreeDecimals = columnKey && (
