@@ -22,8 +22,28 @@
 
     <div class="table-controls">
       <select id="splitSelector">
-        <option value="conference">Conference Stats</option>
-        <option value="overall">Overall Stats</option>
+        <optgroup label="Competition">
+          <option value="conference" selected>Conference</option>
+          <option value="overall">Overall</option>
+          <option value="division">Division</option>
+          <option value="national">National</option>
+        </optgroup>
+        <optgroup label="Location">
+          <option value="home">Home</option>
+          <option value="away">Away</option>
+          <option value="neutral">Neutral Site</option>
+        </optgroup>
+        <optgroup label="Win/Loss">
+          <option value="inWins">In Wins</option>
+          <option value="inLosses">In Losses</option>
+        </optgroup>
+        <optgroup label="Monthly">
+          <option value="november">November</option>
+          <option value="december">December</option>
+          <option value="january">January</option>
+          <option value="february">February</option>
+          <option value="march">March</option>
+        </optgroup>
       </select>
     </div>
 
@@ -92,6 +112,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=19"></script>
 </body>
 </html>

@@ -72,15 +72,20 @@ function renderTable() {
   // To show all columns, set columnsToShow = null
   // To show specific columns, list them here:
   const columnsToShow = [
-  'teamName', 'record', 'gp', 'ptspg', 'scmg', 'pointsPerPossession', 'possessionsPerGame', 
-  'ptspgopp', 'oppPointsPerPossession', 'oppPossessionsPerGame', 'netPointsPerPossession',
-  'offensiveRating', 'defensiveRating',
-  'efgPct', 'toPct', 'orPct', 'drPct', 'ftRate', 'threePtRate', 'shotVolume',
-  'fgpt', 'fgpt3', 'ftpt', 
-  'ptspaintpg', 'ptspaintpgopp', 'ptsbenchpg', 'ptsbenchpgopp', 
-  'ptsfastbpg', 'ptsfastbpgopp', 'ptstopg', 'ptstopgopp',
-  'ptsch2pg', 'ptsch2pgopp',
-  'trebpg', 'drebpg', 'orebpg', 'astpg', 'topg', 'stlpg', 'blkpg'
+  'teamName',
+  'gp', 'wins', 'losses', 'winPct',
+  'ptspg', 'ptspgopp', 'scmg',
+  'possessionsPerGame', 'oppPossessionsPerGame',
+  'pointsPerPossession', 'oppPointsPerPossession', 'netPointsPerPossession',
+  'offensiveRating', 'defensiveRating', 'netRating',
+  'fgpt', 'fgpt3', 'ftpt', 'efgPct', 'ftRate', 'threePtRate', 'shotVolume',
+  'fgptOpp', 'fgpt3Opp', 'ftptOpp', 'efgPctOpp', 'ftRateOpp', 'threePtRateOpp', 'shotVolumeOpp',
+  'trebpg', 'drebpg', 'orebpg', 'orPct', 'drPct',
+  'trebpgopp', 'drebpgopp', 'orebpgopp', 'orPctOpp', 'drPctOpp',
+  'astpg', 'toPct', 'topg', 'stlpg', 'blkpg',
+  'astpgopp', 'toPctOpp', 'topgopp', 'stlpgopp', 'blkpgopp',
+  'ptspaintpg', 'ptsbenchpg', 'ptsfastbpg', 'ptstopg', 'ptsch2pg',
+  'ptspaintpgopp', 'ptsbenchpgopp', 'ptsfastbpgopp', 'ptstopgopp', 'ptsch2pgopp'
 ];
   
   // Filter and order columns
@@ -201,6 +206,14 @@ function formatValue(value, columnKey) {
   
   // Return certain fields as-is (like win-loss record)
   if (columnKey === 'record' || columnKey === 'wins' || columnKey === 'losses') {
+    return value;
+  }
+  
+  // Special handling for Win % - display as decimal without leading 0
+  if (columnKey === 'winPct') {
+    if (typeof value === 'number') {
+      return value.toFixed(3);
+    }
     return value;
   }
   
