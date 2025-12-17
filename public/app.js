@@ -9,6 +9,8 @@ let currentSort = { column: null, direction: 'asc' };
 let currentColumns = []; // Store the current column order
 let currentSplit = 'conference'; // Current split type
 let statsChart = null; // Store chart instance
+let scatterChart = null; // Store scatter chart instance
+let reboundChart = null; // Store rebound scatter chart instance
 let currentChartStat = 'netPointsPerPossession'; // Current stat to display
 
 // Fetch data from API
@@ -70,10 +72,10 @@ function renderTable() {
   // To show all columns, set columnsToShow = null
   // To show specific columns, list them here:
   const columnsToShow = [
-  'teamName', 'record', 'gp', 'ptspg', 'pointsPerPossession', 'possessionsPerGame', 
+  'teamName', 'record', 'gp', 'ptspg', 'scmg', 'pointsPerPossession', 'possessionsPerGame', 
   'ptspgopp', 'oppPointsPerPossession', 'oppPossessionsPerGame', 'netPointsPerPossession',
   'offensiveRating', 'defensiveRating',
-  'efgPct', 'toPct', 'orPct', 'ftRate', 'shotVolume',
+  'efgPct', 'toPct', 'orPct', 'drPct', 'ftRate', 'threePtRate', 'shotVolume',
   'fgpt', 'fgpt3', 'ftpt', 
   'ptspaintpg', 'ptspaintpgopp', 'ptsbenchpg', 'ptsbenchpgopp', 
   'ptsfastbpg', 'ptsfastbpgopp', 'ptstopg', 'ptstopgopp',
@@ -218,10 +220,11 @@ function formatValue(value, columnKey) {
     columnKey.toLowerCase().includes('rate')
   );
   
-  // Check if this is per game stat (needs 1 decimal)
-  const isPerGame = columnKey && (
+  // Check if this is per game stat or SCMG (needs 1 decimal)
+  const isOneDecimal = columnKey && (
     columnKey.includes('pg') || 
-    columnKey.includes('pm')
+    columnKey.includes('pm') ||
+    columnKey === 'scmg'
   );
   
   // If it's already a number, format it
@@ -232,7 +235,7 @@ function formatValue(value, columnKey) {
     if (isPercentage) {
       return value.toFixed(1) + '%';
     }
-    if (isPerGame) {
+    if (isOneDecimal) {
       return value.toFixed(1);
     }
     return value.toFixed(2);
@@ -254,8 +257,8 @@ function formatValue(value, columnKey) {
       if (isPercentage) {
         return numValue.toFixed(1) + '%';
       }
-      // Check if this is per game stat
-      if (isPerGame) {
+      // Check if this is per game stat or SCMG
+      if (isOneDecimal) {
         return numValue.toFixed(1);
       }
       // For whole numbers, don't show decimals (unless per game)
@@ -274,6 +277,8 @@ function formatValue(value, columnKey) {
 // Render Charts
 function renderCharts() {
   renderStatsChart(currentChartStat);
+  renderScatterChart();
+  renderReboundChart();
 }
 
 // Render Dynamic Stats Bar Chart
@@ -403,6 +408,258 @@ function renderStatsChart(statKey) {
         }
       }
     }
+  });
+}
+
+// Render 3PT Rate vs 3PT% Scatterplot
+function renderScatterChart() {
+  const ctx = document.getElementById('scatterChart');
+  if (!ctx) return;
+  
+  // Destroy existing chart if it exists
+  if (scatterChart) {
+    scatterChart.destroy();
+  }
+  
+  // Prepare data for scatter plot
+  const scatterData = statsData.map(team => ({
+    x: team.threePtRate || 0,
+    y: parseFloat(team.fgpt3) || 0,
+    label: team.teamName
+  }));
+  
+  // Calculate mean values for center lines
+  const meanX = scatterData.reduce((sum, point) => sum + point.x, 0) / scatterData.length;
+  const meanY = scatterData.reduce((sum, point) => sum + point.y, 0) / scatterData.length;
+  
+  // Plugin to draw center lines
+  const centerLinesPlugin = {
+    id: 'centerLines',
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+      
+      // Draw vertical center line (mean X)
+      const xPos = x.getPixelForValue(meanX);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(xPos, top);
+      ctx.lineTo(xPos, bottom);
+      ctx.stroke();
+      ctx.restore();
+      
+      // Draw horizontal center line (mean Y)
+      const yPos = y.getPixelForValue(meanY);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(left, yPos);
+      ctx.lineTo(right, yPos);
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+  
+  scatterChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Teams',
+        data: scatterData,
+        backgroundColor: 'rgba(0, 49, 110, 0.6)',
+        borderColor: 'rgba(0, 49, 110, 1)',
+        borderWidth: 2,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1, // Make it square
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const point = context.raw;
+              return `${point.label}: ${point.x.toFixed(1)}% 3PT Rate, ${point.y.toFixed(1)}% 3PT FG%`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: '3-Point Attempt Rate (%)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          },
+          ticks: {
+            callback: function(value) {
+              return value.toFixed(0) + '%';
+            }
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: '3-Point Field Goal Percentage (%)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          },
+          ticks: {
+            callback: function(value) {
+              return value.toFixed(0) + '%';
+            }
+          }
+        }
+      }
+    },
+    plugins: [centerLinesPlugin]
+  });
+}
+
+// Render OREB% vs DREB% Scatterplot
+function renderReboundChart() {
+  const ctx = document.getElementById('reboundChart');
+  if (!ctx) return;
+  
+  // Destroy existing chart if it exists
+  if (reboundChart) {
+    reboundChart.destroy();
+  }
+  
+  // Prepare data for scatter plot
+  const scatterData = statsData.map(team => ({
+    x: parseFloat(team.orPct) || 0,
+    y: parseFloat(team.drPct) || 0,
+    label: team.teamName
+  }));
+  
+  // Calculate mean values for center lines
+  const meanX = scatterData.reduce((sum, point) => sum + point.x, 0) / scatterData.length;
+  const meanY = scatterData.reduce((sum, point) => sum + point.y, 0) / scatterData.length;
+  
+  // Plugin to draw center lines
+  const centerLinesPlugin = {
+    id: 'centerLinesRebound',
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+      
+      // Draw vertical center line (mean X)
+      const xPos = x.getPixelForValue(meanX);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(xPos, top);
+      ctx.lineTo(xPos, bottom);
+      ctx.stroke();
+      ctx.restore();
+      
+      // Draw horizontal center line (mean Y)
+      const yPos = y.getPixelForValue(meanY);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(left, yPos);
+      ctx.lineTo(right, yPos);
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+  
+  reboundChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Teams',
+        data: scatterData,
+        backgroundColor: 'rgba(0, 49, 110, 0.6)',
+        borderColor: 'rgba(0, 49, 110, 1)',
+        borderWidth: 2,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1, // Make it square
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const point = context.raw;
+              return `${point.label}: ${point.x.toFixed(1)}% OREB, ${point.y.toFixed(1)}% DREB`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Offensive Rebound Percentage (%)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          },
+          ticks: {
+            callback: function(value) {
+              return value.toFixed(0) + '%';
+            }
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Defensive Rebound Percentage (%)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          },
+          ticks: {
+            callback: function(value) {
+              return value.toFixed(0) + '%';
+            }
+          }
+        }
+      }
+    },
+    plugins: [centerLinesPlugin]
   });
 }
 

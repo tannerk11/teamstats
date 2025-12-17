@@ -40,7 +40,7 @@ h1 {
 }
 
 .table-controls {
-  padding: 20px 30px 20px;
+  padding: 20px 30px 5px;
   display: flex;
   justify-content: flex-end;
   background: white;
@@ -177,6 +177,33 @@ h1 {
 
 .chart-container canvas {
   max-height: 400px;
+}
+
+/* Scatter Charts - Side by Side Layout */
+.scatter-charts-row {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.scatter-chart-container {
+  flex: 0 0 auto;
+}
+
+/* Scatter Chart - Force Square Shape */
+.scatter-chart-wrapper {
+  width: 600px;
+  height: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.scatter-chart-wrapper canvas {
+  max-height: none !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .table-container {

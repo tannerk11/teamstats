@@ -27,7 +27,22 @@
       </select>
     </div>
 
-    <!-- Charts Section -->
+    <div class="table-outside">
+      <div class="table-container">
+        <table id="statsTable">
+          <thead>
+            <tr id="tableHeader">
+              <!-- Headers will be generated dynamically -->
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Data will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+    <!-- Bar Chart Section -->
     <div class="charts-section">
       <div class="chart-container">
         <div class="chart-header">
@@ -53,21 +68,30 @@
       </div>
     </div>
 
-    <div class="table-outside">
-      <div class="table-container">
-        <table id="statsTable">
-          <thead>
-            <tr id="tableHeader">
-              <!-- Headers will be generated dynamically -->
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <!-- Data will be populated here -->
-        </tbody>
-      </table>
+    <!-- Scatterplot Section -->
+    <div class="charts-section">
+      <div class="scatter-charts-row">
+        <div class="chart-container scatter-chart-container">
+          <div class="chart-header">
+            <h2>3-Point Attempt Rate vs 3-Point FG%</h2>
+          </div>
+          <div class="scatter-chart-wrapper">
+            <canvas id="scatterChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-container scatter-chart-container">
+          <div class="chart-header">
+            <h2>OREB% vs DREB%</h2>
+          </div>
+          <div class="scatter-chart-wrapper">
+            <canvas id="reboundChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>
