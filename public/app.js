@@ -6,10 +6,8 @@ const API_URL = window.location.hostname === 'localhost'
 let statsData = [];
 let allStatsData = []; // Store unfiltered data
 let columnLabels = {};
-let currentSort = { column: null, direction: 'asc' };
+let currentSort = { column: 'netRatingRank', direction: 'asc' };
 let currentColumns = []; // Store the current column order
-let currentSplit = 'conference'; // Current split type
-let filterMode = 'simple'; // 'simple' or 'custom'
 let statsChart = null; // Store chart instance
 let scatterChart = null; // Store scatter chart instance
 let reboundChart = null; // Store rebound scatter chart instance
@@ -17,7 +15,7 @@ let currentChartStat = 'netRating'; // Current stat to display
 let currentConference = ''; // Current conference filter
 
 // Fetch data from API
-async function fetchStats(split = currentSplit, customFilters = null) {
+async function fetchStats(customFilters = null) {
   const loading = document.getElementById('loading');
   const error = document.getElementById('error');
   const statsTable = document.getElementById('statsTable');
@@ -42,9 +40,10 @@ async function fetchStats(split = currentSplit, customFilters = null) {
       url += '?' + params.toString();
       console.log('Fetching with custom filters:', url, customFilters);
     } else {
-      url += `?split=${split}`;
+      // Default to overall stats with no filters
+      url += '?split=overall';
       if (currentConference) url += `&conference=${currentConference}`;
-      console.log('Fetching with split:', url);
+      console.log('Fetching overall stats:', url);
     }
     
     const response = await fetch(url);
@@ -96,14 +95,18 @@ function updateLastUpdated(timestamp) {
 function renderTable() {
   if (statsData.length === 0) return;
   
-  // Calculate rankings based on netRating (only for simple mode)
+  // Add net rating rank to each team
+  const teamsWithNetRating = statsData
+    .map((team, index) => ({ team, value: team.netRating, originalIndex: index }))
+    .filter(item => item.value != null && !isNaN(item.value))
+    .sort((a, b) => b.value - a.value); // Sort by netRating descending (higher is better)
+  
+  // Assign net rating rank to each team
+  teamsWithNetRating.forEach((item, rank) => {
+    statsData[item.originalIndex].netRatingRank = rank + 1;
+  });
+  
   let rankedData = statsData;
-  if (filterMode === 'simple') {
-    rankedData = [...statsData].sort((a, b) => (b.netRating || 0) - (a.netRating || 0));
-    rankedData.forEach((team, index) => {
-      team.rank = index + 1;
-    });
-  }
   
   // Get all unique columns from the data
   const allColumns = new Set();
@@ -114,21 +117,8 @@ function renderTable() {
   // ====== COLUMN FILTER: Edit this array to show only specific columns ======
   // To show all columns, set columnsToShow = null
   // To show specific columns, list them here:
-  const columnsToShow = filterMode === 'simple' ? [
-    'teamName',
-    'rank', 'gp', 'wins', 'losses', 'winPct',
-    'netRating', 'offensiveRating', 'defensiveRating',
-    'ptspg', 'ptspgopp', 'scmg',
-    'possessionsPerGame', 'oppPossessionsPerGame',
-    'fgPct', 'fg3Pct', 'ftPct', 'efgPct', 'ftRate', 'threePtRate', 'shotVolume',
-    'fgPctOpp', 'fg3PctOpp', 'ftPctOpp', 'efgPctOpp', 'ftRateOpp', 'threePtRateOpp', 'shotVolumeOpp',
-    'trebpg', 'drebpg', 'orebpg', 'orPct', 'drPct',
-    'trebpgopp', 'drebpgopp', 'orebpgopp', 'orPctOpp', 'drPctOpp',
-    'astpg', 'toPct', 'topg', 'stlpg', 'blkpg',
-    'astpgopp', 'toPctOpp', 'topgopp', 'stlpgopp', 'blkpgopp',
-    'ptspaintpg', 'ptsbenchpg', 'ptsfastbpg', 'ptstopg', 'ptsch2pg',
-    'ptspaintpgopp', 'ptsbenchpgopp', 'ptsfastbpgopp', 'ptstopgopp', 'ptsch2pgopp'
-  ] : [
+  const columnsToShow = [
+    'netRatingRank',
     'teamName',
     'gp', 'wins', 'losses', 'winPct',
     'netRating', 'offensiveRating', 'defensiveRating',
@@ -161,10 +151,12 @@ function renderTable() {
   // Store columns for use in sorting
   currentColumns = columns;
   
-  // Update statsData with ranked data for rendering
-  if (filterMode === 'simple') {
-    statsData = rankedData;
-  }
+  // Sort by rank by default (ascending - lower rank numbers first)
+  statsData.sort((a, b) => {
+    const aVal = a.netRatingRank || 999999;
+    const bVal = b.netRatingRank || 999999;
+    return aVal - bVal;
+  });
   
   // Render header
   const headerRow = document.getElementById('tableHeader');
@@ -177,21 +169,68 @@ function renderTable() {
     th.addEventListener('click', () => sortTable(th.dataset.column));
   });
   
+  // Add sort indicator to rank column
+  const rankHeader = document.querySelector('th[data-column="netRatingRank"]');
+  if (rankHeader) {
+    rankHeader.classList.add('sort-asc');
+  }
+  
   // Render body
   renderTableBody(columns);
 }
 
 // Render table body
+// Calculate rankings for stats that should display rankings
+function calculateRankings() {
+  // Only rank ORTG (higher is better) and DRTG (lower is better)
+  const rankedStats = ['offensiveRating'];
+  const rankedStatsLowerBetter = ['defensiveRating'];
+  
+  const rankings = {};
+  
+  // Calculate rankings for each stat
+  [...rankedStats, ...rankedStatsLowerBetter].forEach(stat => {
+    const isLowerBetter = rankedStatsLowerBetter.includes(stat);
+    
+    // Create array of teams with valid values for this stat
+    const validTeams = statsData
+      .map((team, index) => ({ team, value: team[stat], index }))
+      .filter(item => item.value != null && !isNaN(item.value));
+    
+    // Sort by value
+    validTeams.sort((a, b) => {
+      return isLowerBetter ? a.value - b.value : b.value - a.value;
+    });
+    
+    // Assign rankings
+    validTeams.forEach((item, rank) => {
+      if (!rankings[item.index]) rankings[item.index] = {};
+      rankings[item.index][stat] = rank + 1;
+    });
+  });
+  
+  return rankings;
+}
+
 function renderTableBody(columns) {
   const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = statsData.map(team => {
+  const rankings = calculateRankings();
+  
+  tbody.innerHTML = statsData.map((team, teamIndex) => {
     const cells = columns.map(col => {
       const value = team[col];
       const formatted = formatValue(value, col);
       let cellClass = '';
       if (col === 'teamName') cellClass = 'team-name';
-      else if (col === 'rank') cellClass = 'rank-cell';
-      return `<td class="${cellClass}">${formatted}</td>`;
+      else if (col === 'netRatingRank') cellClass = 'rank-cell';
+      
+      // Add ranking if available for this stat
+      const ranking = rankings[teamIndex]?.[col];
+      const displayValue = ranking 
+        ? `${formatted} <span class="stat-rank">${ranking}</span>`
+        : formatted;
+      
+      return `<td class="${cellClass}">${displayValue}</td>`;
     }).join('');
     return `<tr>${cells}</tr>`;
   }).join('');
@@ -254,6 +293,7 @@ function sortTable(column) {
 // Get readable column label
 function getColumnLabel(columnKey) {
   if (columnKey === 'rank') return 'Rank';
+  if (columnKey === 'netRatingRank') return 'Rank';
   if (columnLabels[columnKey]) {
     return columnLabels[columnKey];
   }
@@ -269,7 +309,7 @@ function formatValue(value, columnKey) {
   if (value == null) return '-';
   
   // Return certain fields as-is (like win-loss record, rank)
-  if (columnKey === 'record' || columnKey === 'wins' || columnKey === 'losses' || columnKey === 'rank') {
+  if (columnKey === 'record' || columnKey === 'wins' || columnKey === 'losses' || columnKey === 'rank' || columnKey === 'netRatingRank') {
     return value;
   }
   
@@ -753,38 +793,24 @@ function scheduleNextRefresh() {
 
 // Initialize
 document.getElementById('refreshBtn').addEventListener('click', () => {
-  if (filterMode === 'simple') {
-    fetchStats(currentSplit);
-  } else {
-    applyCustomFilters();
-  }
-});
-
-// Tab toggle
-document.querySelectorAll('.tab-button').forEach(button => {
-  button.addEventListener('click', (e) => {
-    const tab = e.target.dataset.tab;
-    filterMode = tab;
-    
-    // Update active tab button
-    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-    e.target.classList.add('active');
-    
-    // Update active filter section
-    document.getElementById('simpleFilters').classList.toggle('active', filterMode === 'simple');
-    document.getElementById('customFilters').classList.toggle('active', filterMode === 'custom');
-    
-    // Show/hide charts based on mode
-    const chartsSection = document.querySelector('.charts-container');
-    if (chartsSection) {
-      chartsSection.style.display = filterMode === 'simple' ? 'block' : 'none';
-    }
-    
-    // Fetch data based on selected mode
-    if (filterMode === 'simple') {
-      fetchStats(currentSplit);
-    }
+  // Check if any filters are active
+  const filters = {
+    location: document.getElementById('locationFilter').value,
+    competition: document.getElementById('competitionFilter').value,
+    winLoss: document.getElementById('winLossFilter').value,
+    month: document.getElementById('monthFilter').value
+  };
+  
+  const activeFilters = {};
+  Object.keys(filters).forEach(key => {
+    if (filters[key]) activeFilters[key] = filters[key];
   });
+  
+  if (Object.keys(activeFilters).length > 0) {
+    applyCustomFilters();
+  } else {
+    fetchStats();
+  }
 });
 
 // Conference filter functions
@@ -792,45 +818,38 @@ function populateConferenceFilters() {
   // Get unique conferences
   const conferences = [...new Set(allStatsData.map(team => team.conference))].sort();
   
-  // Populate both simple and custom conference dropdowns
-  const simpleSelect = document.getElementById('conferenceSimpleFilter');
+  // Populate conference dropdown
   const customSelect = document.getElementById('conferenceCustomFilter');
   
-  [simpleSelect, customSelect].forEach(select => {
-    // Clear existing options except "All Conferences"
-    select.innerHTML = '<option value="">All Conferences</option>';
-    
-    // Add conference options
-    conferences.forEach(conf => {
-      const option = document.createElement('option');
-      option.value = conf;
-      option.textContent = conf;
-      select.appendChild(option);
-    });
-    
-    // Set to current conference if one is selected
-    if (currentConference) {
-      select.value = currentConference;
-    }
+  // Clear existing options except "All Conferences"
+  customSelect.innerHTML = '<option value="">All Conferences</option>';
+  
+  // Add conference options
+  conferences.forEach(conf => {
+    const option = document.createElement('option');
+    option.value = conf;
+    option.textContent = conf;
+    customSelect.appendChild(option);
   });
-}
-
-function applyConferenceFilter() {
+  
+  // Set to current conference if one is selected
   if (currentConference) {
-    statsData = allStatsData.filter(team => team.conference === currentConference);
-  } else {
-    statsData = allStatsData;
+    customSelect.value = currentConference;
   }
 }
 
-// Conference filter change handlers
-document.getElementById('conferenceSimpleFilter').addEventListener('change', (e) => {
-  currentConference = e.target.value;
-  applyConferenceFilter();
-  renderTable();
-  renderCharts();
-});
+function applyConferenceFilter() {
+  // Filter out teams with 0 games played, then apply conference filter if set
+  let filteredData = allStatsData.filter(team => (team.gp || 0) > 0);
+  
+  if (currentConference) {
+    statsData = filteredData.filter(team => team.conference === currentConference);
+  } else {
+    statsData = filteredData;
+  }
+}
 
+// Conference filter change handler
 document.getElementById('conferenceCustomFilter').addEventListener('change', (e) => {
   currentConference = e.target.value;
   applyConferenceFilter();
@@ -838,14 +857,11 @@ document.getElementById('conferenceCustomFilter').addEventListener('change', (e)
   renderCharts();
 });
 
-// Simple split selector
-document.getElementById('splitSelector').addEventListener('change', (e) => {
-  currentSplit = e.target.value;
-  fetchStats(currentSplit);
-});
-
 // Custom filters apply button
 document.getElementById('applyFilters').addEventListener('click', applyCustomFilters);
+
+// Reset filters button
+document.getElementById('resetFilters').addEventListener('click', resetFilters);
 
 function applyCustomFilters() {
   const filters = {
@@ -861,12 +877,27 @@ function applyCustomFilters() {
     if (filters[key]) activeFilters[key] = filters[key];
   });
   
+  // If no filters selected, fetch overall stats
   if (Object.keys(activeFilters).length === 0) {
-    alert('Please select at least one filter');
-    return;
+    fetchStats();
+  } else {
+    fetchStats(activeFilters);
   }
+}
+
+function resetFilters() {
+  // Reset all filter dropdowns
+  document.getElementById('conferenceCustomFilter').value = '';
+  document.getElementById('locationFilter').value = '';
+  document.getElementById('competitionFilter').value = '';
+  document.getElementById('winLossFilter').value = '';
+  document.getElementById('monthFilter').value = '';
   
-  fetchStats(null, activeFilters);
+  // Reset current conference
+  currentConference = '';
+  
+  // Fetch overall stats
+  fetchStats();
 }
 
 // Chart stat selector

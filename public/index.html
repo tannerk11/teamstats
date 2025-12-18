@@ -20,49 +20,7 @@
     <div id="error" class="error" style="display: none;"></div>
 
     <div class="filter-controls">
-      <div class="tab-container">
-        <button class="tab-button active" data-tab="simple">Pre-calculated Splits</button>
-        <button class="tab-button" data-tab="custom">Custom Filters</button>
-      </div>
-
-      <div id="simpleFilters" class="filter-section active">
-        <div class="filter-group">
-          <label for="conferenceSimpleFilter">Conference:</label>
-          <select id="conferenceSimpleFilter">
-            <option value="">All Conferences</option>
-          </select>
-        </div>
-        
-        <div class="filter-group">
-          <label for="splitSelector">Split:</label>
-          <select id="splitSelector">
-            <optgroup label="Competition">
-              <option value="conference" selected>Conference</option>
-              <option value="overall">Overall</option>
-              <option value="division">Division</option>
-              <option value="national">National</option>
-            </optgroup>
-            <optgroup label="Location">
-              <option value="home">Home</option>
-              <option value="away">Away</option>
-              <option value="neutral">Neutral Site</option>
-            </optgroup>
-            <optgroup label="Win/Loss">
-              <option value="inWins">In Wins</option>
-              <option value="inLosses">In Losses</option>
-            </optgroup>
-            <optgroup label="Monthly">
-              <option value="november">November</option>
-              <option value="december">December</option>
-              <option value="january">January</option>
-              <option value="february">February</option>
-              <option value="march">March</option>
-            </optgroup>
-          </select>
-        </div>
-      </div>
-
-      <div id="customFilters" class="filter-section">
+      <div id="customFilters" class="filter-section active">
         <div class="filter-group">
           <label for="conferenceCustomFilter">Conference:</label>
           <select id="conferenceCustomFilter">
@@ -113,6 +71,7 @@
         </div>
 
         <button id="applyFilters" class="apply-filters-btn">Apply Filters</button>
+        <button id="resetFilters" class="reset-filters-btn">Reset</button>
       </div>
     </div>
 

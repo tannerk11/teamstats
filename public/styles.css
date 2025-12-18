@@ -6,31 +6,47 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: #f5f5f5;
-  padding: 20px;
+  background: #f8fafc;
+  padding: 0;
+  margin: 0;
 }
 
 .container {
-  max-width: 1400px;
-  margin: 0 auto;
+  min-height: 100vh;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  overflow: hidden;
 }
 
 header {
   background: linear-gradient(135deg, #00316E 0%, #00224B 100%);
   color: white;
-  padding: 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 24px 0;
+}
+
+header > h1,
+header > .header-info {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+/* Create a flex wrapper effect for header children */
+header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  padding: 24px;
+}
+
+@media (min-width: 1460px) {
+  header {
+    padding: 24px calc((100% - 1400px) / 2);
+  }
 }
 
 h1 {
   font-size: 28px;
   font-weight: 600;
+  width: 100%;
 }
 
 .header-info {
@@ -40,9 +56,22 @@ h1 {
 }
 
 .filter-controls {
-  padding-top: 15px;
+  padding: 20px 0;
   background: #f8fafc;
   border-bottom: 1px solid #e2e8f0;
+}
+
+.filter-controls > * {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.filter-controls h2 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #00316E;
+  font-weight: 600;
 }
 
 .tab-container {
@@ -87,14 +116,14 @@ h1 {
 .filter-section.active {
   display: flex;
   gap: 15px;
-  align-items: center;
+  align-items: flex-end;
   flex-wrap: wrap;
 }
 
 .filter-group {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .filter-group label {
@@ -134,6 +163,12 @@ h1 {
   box-shadow: 0 0 0 3px rgba(0, 49, 110, 0.1);
 }
 
+.filter-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .apply-filters-btn {
   background: #00316E;
   color: white;
@@ -144,7 +179,6 @@ h1 {
   font-size: 14px;
   font-weight: 600;
   transition: all 0.2s;
-  margin-left: 10px;
 }
 
 .apply-filters-btn:hover {
@@ -154,6 +188,28 @@ h1 {
 }
 
 .apply-filters-btn:active {
+  transform: translateY(0);
+}
+
+.reset-filters-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.reset-filters-btn:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.2);
+}
+
+.reset-filters-btn:active {
   transform: translateY(0);
 }
 
@@ -211,10 +267,8 @@ h1 {
 
 /* Charts Section */
 .charts-section {
-  padding: 30px;
+  padding: 30px 0;
   background: #f7fafc;
-  border-top: 1px solid #e2e8f0;
-  border-bottom: 1px solid #e2e8f0;
 }
 
 .chart-container {
@@ -222,6 +276,7 @@ h1 {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  max-width: calc(1400px - 60px);
   margin: 0 auto;
 }
 
@@ -282,10 +337,13 @@ h1 {
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
+  max-width: calc(1400px - 60px);
+  margin: 0 auto;
 }
 
 .scatter-chart-container {
   flex: 0 0 auto;
+  max-width: none;
 }
 
 /* Scatter Chart - Force Square Shape */
@@ -304,37 +362,39 @@ h1 {
 
 .table-container {
   overflow-x: auto;
-  overflow-y: visible;
 }
 
 .table-outside {
-  max-width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 15px 30px 30px;
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 14px;
+  position: relative;
 }
 
 thead {
-  background: #f7fafc;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
 }
 
 th {
   padding: 12px 8px;
-  text-align: left;
+  text-align: center;
   font-weight: 600;
   color: #2d3748;
+  background: #f7fafc;
   border-bottom: 2px solid #e2e8f0;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
-  position: relative;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 th:hover {
@@ -361,6 +421,8 @@ td {
   padding: 10px 8px;
   border-bottom: 1px solid #e2e8f0;
   color: #4a5568;
+  white-space: nowrap;
+  text-align: center;
 }
 
 tbody tr:hover {
@@ -380,9 +442,21 @@ tbody tr:nth-child(even):hover {
   color: #2d3748;
   min-width: 150px;
   position: sticky;
-  left: 0;
+  left: 60px;
   background: white;
   z-index: 5;
+  text-align: left !important;
+}
+
+/* Stat ranking display */
+.stat-rank {
+  font-size: 11px;
+  color: #718096;
+  margin-left: 4px;
+  font-weight: 500;
+  vertical-align: middle;
+  white-space: nowrap;
+  display: inline;
 }
 
 /* Rank column styling */
@@ -393,6 +467,9 @@ tbody tr:nth-child(even):hover {
   min-width: 60px;
   background: #f0f7ff;
   font-size: 15px;
+  position: sticky;
+  left: 0;
+  z-index: 5;
 }
 
 tbody tr:nth-child(even) .rank-cell {
@@ -403,12 +480,21 @@ tbody tr:hover .rank-cell {
   background: #dae9ff;
 }
 
-/* Sticky header for team name column */
+/* Sticky header for rank column (first column) */
 th:first-child {
   position: sticky;
   left: 0;
   background: #f7fafc;
   z-index: 15;
+}
+
+/* Sticky header for team name column (second column) */
+th:nth-child(2) {
+  position: sticky;
+  left: 60px;
+  background: #f7fafc;
+  z-index: 15;
+  text-align: left !important;
 }
 
 /* Add shadow to sticky column for visual separation */
