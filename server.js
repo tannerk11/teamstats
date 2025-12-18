@@ -3,8 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import { TEAMS } from './config/teams.js';
 import { fetchAllTeams } from './lib/dataFetcher.js';
-import { calculateCustomStats } from './lib/calculator.js';
+import { calculateCustomStats, calculateAdvancedStats } from './lib/calculator.js';
 import { COLUMN_LABELS } from './lib/columnLabels.js';
+import { getFilteredTeamStats } from './lib/eventFilter.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,16 +21,52 @@ app.use(express.static('public'));
 app.get('/api/stats', async (req, res) => {
   try {
     const splitType = req.query.split || 'conference';
+    const useCustomFilters = req.query.location || req.query.competition || req.query.winLoss || req.query.month;
+    
     console.log(`Fetching fresh data (split: ${splitType})...`);
     const teamsData = await fetchAllTeams(TEAMS);
-    const statistics = calculateCustomStats(teamsData, splitType);
+    
+    let statistics;
+    let filterInfo = { split: splitType };
+    
+    // Use custom filtering if any filter params are provided
+    if (useCustomFilters) {
+      const filters = {
+        location: req.query.location,
+        competition: req.query.competition,
+        winLoss: req.query.winLoss,
+        month: req.query.month
+      };
+      
+      console.log('Applying custom filters:', filters);
+      
+      // Process each team with filters and get aggregated stats
+      statistics = teamsData
+        .filter(team => team.success && team.data)
+        .map(team => {
+          const filteredStats = getFilteredTeamStats(team.data, filters);
+          if (!filteredStats) return null;
+          
+          // Add conference to stats before calculating advanced metrics
+          filteredStats.conference = team.conference || 'Unknown';
+          
+          // Calculate advanced stats directly from the aggregated raw stats
+          return calculateAdvancedStats(filteredStats);
+        }).filter(Boolean);
+      
+      filterInfo = { customFilters: filters };
+    } else {
+      // Use pre-calculated splits
+      statistics = calculateCustomStats(teamsData, splitType);
+      filterInfo = { split: splitType };
+    }
     
     res.json({
       success: true,
       lastUpdated: new Date().toISOString(),
       data: statistics,
       columnLabels: COLUMN_LABELS,
-      split: splitType
+      ...filterInfo
     });
   } catch (error) {
     console.error('Error fetching stats:', error);

@@ -1,0 +1,1657 @@
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/California_Pacific/teams?jsRendering=true
+  ✅ Found 6 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Cal Maritime...
+      ✅ Found JSON
+    🔍 Northern New Mexico...
+      ✅ Found JSON
+    🔍 Pacific Union (CA)...
+      ✅ Found JSON
+    🔍 Simpson (CA)...
+      ✅ Found JSON
+    🔍 Stanton (CA)...
+      ✅ Found JSON
+    🔍 Westcliff (Calif.)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Cal Maritime',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/98nzncgb3wafq8yy.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Northern New Mexico',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/bn11d0cb428bfqb3.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Pacific Union (CA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/966xcecaqwmlnhu7.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Simpson (CA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2kel1qoxjv1gtd2h.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Stanton (CA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/k4wglwbxv3tlmjh9.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Westcliff (Calif.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/c1p5ibrwxhb26q71.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 6 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Chicagoland/teams?jsRendering=true
+  ✅ Found 12 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Calumet (IN)...
+      ✅ Found JSON
+    🔍 Governors State...
+      ✅ Found JSON
+    🔍 Holy Cross (Ind.)...
+      ✅ Found JSON
+    🔍 Indiana Northwest...
+      ✅ Found JSON
+    🔍 Indiana South Bend (IN)...
+      ✅ Found JSON
+    🔍 Judson (IL)...
+      ✅ Found JSON
+    🔍 Olivet Nazarene (IL)...
+      ✅ Found JSON
+    🔍 Saint Xavier (IL)...
+      ✅ Found JSON
+    🔍 St. Ambrose (IA)...
+      ✅ Found JSON
+    🔍 St. Francis (IL)...
+      ✅ Found JSON
+    🔍 Trinity Christian (IL)...
+      ✅ Found JSON
+    🔍 Viterbo...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Calumet (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/nu6ztx3sdtck0zpy.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Governors State',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0hodbajwdhfbbxyc.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Holy Cross (Ind.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/bqhnoe98d419bi87.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Indiana Northwest',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/unjxjxd9f5u7eocu.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Indiana South Bend (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qx5l2pqwnz8tizce.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Judson (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/lw3v01doxpg9an08.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Olivet Nazarene (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/jippabvj1oniftyy.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Saint Xavier (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/uqyg9ggyp95p85ll.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'St. Ambrose (IA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/savdwlesti7mhodq.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'St. Francis (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9z3oryhapsd4crpr.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Trinity Christian (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/g0kww6f2yicjsrol.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Viterbo',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/5ezvdhjls8g1k423.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 12 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Continental/teams?jsRendering=true
+  ✅ Found 11 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Alice Lloyd (KY)...
+      ✅ Found JSON
+    🔍 Arkansas Baptist...
+      ✅ Found JSON
+    🔍 Carolina (N.C.)...
+      ✅ Found JSON
+    🔍 Fisher (MA)...
+      ✅ Found JSON
+    🔍 Florida College (FL)...
+      ✅ Found JSON
+    🔍 Florida National...
+      ✅ Found JSON
+    🔍 Georgia Gwinnett...
+      ✅ Found JSON
+    🔍 Haskell Indian Nations University...
+      ✅ Found JSON
+    🔍 Hesston College...
+      ✅ Found JSON
+    🔍 Morris...
+      ✅ Found JSON
+    🔍 Washington Adventist (MD)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Alice Lloyd (KY)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/utquwo36widup1zj.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Arkansas Baptist',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/lsenzzzbiwaj92vo.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Carolina (N.C.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/lq6khpkwzk0lxcjc.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Fisher (MA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/97ife69ayjsx4aeg.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Florida College (FL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qte3s0zhuaxgapw5.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Florida National',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/fsiytsvtffrc5zzz.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Georgia Gwinnett',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/fp8ppv1u0prs4tao.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Haskell Indian Nations University',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/jpuc70yew66noevp.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Hesston College',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ux03rfyc3su2199x.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Morris',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/gkrpogscn6zr13e6.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Washington Adventist (MD)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ogfxb82uv9u1162h.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 11 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Crossroads/teams?jsRendering=true
+  ✅ Found 10 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Bethel (IN)...
+      ✅ Found JSON
+    🔍 Goshen (IN)...
+      ✅ Found JSON
+    🔍 Grace (Ind.)...
+      ✅ Found JSON
+    🔍 Huntington (IN)...
+      ✅ Found JSON
+    🔍 Indiana Wesleyan...
+      ✅ Found JSON
+    🔍 Marian...
+      ✅ Found JSON
+    🔍 Mount Vernon Nazarene (OH)...
+      ✅ Found JSON
+    🔍 Saint Francis (IN)...
+      ✅ Found JSON
+    🔍 Spring Arbor (Mich.)...
+      ✅ Found JSON
+    🔍 Taylor (IN)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Bethel (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/bpg9r1ko4226lt9c.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Goshen (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9kadalxixwx49lrn.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Grace (Ind.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9dywy441jl3aoc1b.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Huntington (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ijw9m5k79jl8apu9.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Indiana Wesleyan',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/56wbwagnvaxroi56.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Marian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/3ausanq6wvezlgxy.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Mount Vernon Nazarene (OH)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/hb50choy92t9zfe2.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Saint Francis (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/cb8db3txklxyc2pc.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Spring Arbor (Mich.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/cmtdcehecjx417n8.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Taylor (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/adb8lbgc77cnqk9n.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 10 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Frontier/teams?jsRendering=true
+  ✅ Found 12 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Bellevue (NE)...
+      ✅ Found JSON
+    🔍 Bismarck State (ND)...
+      ✅ Found JSON
+    🔍 Carroll (MT)...
+      ✅ Found JSON
+    🔍 Dakota State (SD)...
+      ✅ Found JSON
+    🔍 Dickinson State (ND)...
+      ✅ Found JSON
+    🔍 Mayville State...
+      ✅ Found JSON
+    🔍 Montana State-Northern (MT)...
+      ✅ Found JSON
+    🔍 Montana Tech (MT)...
+      ✅ Found JSON
+    🔍 Montana Western (MT)...
+      ✅ Found JSON
+    🔍 Providence (MT)...
+      ✅ Found JSON
+    🔍 Rocky Mountain (MT)...
+      ✅ Found JSON
+    🔍 Valley City State...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Bellevue (NE)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/so1oqpcdme78dvk3.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Bismarck State (ND)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/geu6ewv55c4rtl9v.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Carroll (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/77k94oykgzv6w8ef.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Dakota State (SD)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/krbl4y3pe460n3u6.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Dickinson State (ND)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/xjfzgl4n71gr0vnr.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Mayville State',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/koxj4giy13frqier.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Montana State-Northern (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7jkz3hzdr4dq3qja.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Montana Tech (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/t2gi12ks6ithhvps.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Montana Western (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/5x66ef619svxlach.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Providence (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qtsdm4cwz0ksvwlg.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Rocky Mountain (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/x0giszf8s5mck8z4.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Valley City State',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/o43m70ylykqkbcu8.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 12 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Great_Plains/teams?jsRendering=true
+  ✅ Found 11 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Briar Cliff (IA)...
+      ✅ Found JSON
+    🔍 Concordia (Neb.)...
+      ✅ Found JSON
+    🔍 Dakota Wesleyan (SD)...
+      ✅ Found JSON
+    🔍 Doane (NE)...
+      ✅ Found JSON
+    🔍 Dordt (IA)...
+      ✅ Found JSON
+    🔍 Hastings...
+      ✅ Found JSON
+    🔍 Midland...
+      ✅ Found JSON
+    🔍 Morningside (Iowa)...
+      ✅ Found JSON
+    🔍 Mount Marty...
+      ✅ Found JSON
+    🔍 Northwestern (Iowa)...
+      ✅ Found JSON
+    🔍 Waldorf...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Briar Cliff (IA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2p9iztvhnymzitjz.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Concordia (Neb.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/5vcsx4rpuv7yco96.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Dakota Wesleyan (SD)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/p6hggilvflkpfy5n.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Doane (NE)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2pweokvomp075t04.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Dordt (IA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/8yf84siytuh1vd2d.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Hastings',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/61rhgpr7gvykllzf.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Midland',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/xb7l7kvc62jcki6m.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Morningside (Iowa)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/kkm7lztsqyrz76hh.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Mount Marty',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/a80f731itzm9rq45.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Northwestern (Iowa)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/yiy0s0ukmbrh55g9.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Waldorf',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/8i86sp8l6s1yci49.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 11 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Great_Southwest/teams?jsRendering=true
+  ✅ Found 9 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Arizona Christian...
+      ✅ Found JSON
+    🔍 Benedictine Mesa...
+      ✅ Found JSON
+    🔍 Embry-Riddle (AZ)...
+      ✅ Found JSON
+    🔍 Hope International...
+      ✅ Found JSON
+    🔍 La Sierra...
+      ✅ Found JSON
+    🔍 Life Pacific...
+      ✅ Found JSON
+    🔍 OUAZ...
+      ✅ Found JSON
+    🔍 Park-Gilbert (AZ)...
+      ✅ Found JSON
+    🔍 The Master's (Calif.)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Arizona Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ewg3uwod6litgh4k.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Benedictine Mesa',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0v3ibcw4z8ksjawf.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Embry-Riddle (AZ)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/uahzc9pfcg1la2ys.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Hope International',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/j1nfsgs187990vmz.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'La Sierra',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/th6cpawtqnswsolt.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Life Pacific',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/jdhor053gehturdd.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'OUAZ',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mbgclfsuebfr9uhd.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Park-Gilbert (AZ)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/g4jnyn355yajs75r.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'The Master's (Calif.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/o0wa5pxh8wikk4jr.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 9 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/HBCU_Conference/teams?jsRendering=true
+  ✅ Found 15 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Dillard (La.)...
+      ✅ Found JSON
+    🔍 Fisk (TN)...
+      ✅ Found JSON
+    🔍 Huston-Tillotson...
+      ✅ Found JSON
+    🔍 Oakwood (AL)...
+      ✅ Found JSON
+    🔍 Paul Quinn...
+      ✅ Found JSON
+    🔍 Philander Smith (AR)...
+      ✅ Found JSON
+    🔍 Rust (MS)...
+      ✅ Found JSON
+    🔍 Southern University at New Orleans (LA)...
+      ✅ Found JSON
+    🔍 Stillman...
+      ✅ Found JSON
+    🔍 Talladega (AL)...
+      ✅ Found JSON
+    🔍 Tougaloo (Miss.)...
+      ✅ Found JSON
+    🔍 Virgin Islands...
+      ✅ Found JSON
+    🔍 Voorhees University...
+      ✅ Found JSON
+    🔍 Wilberforce (OH)...
+      ✅ Found JSON
+    🔍 Wiley (TX)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Dillard (La.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/3kysfppgqn9w5ww6.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Fisk (TN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/iiqndbcumwot3efl.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Huston-Tillotson',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/886zvby1a7gkmdyk.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Oakwood (AL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/3tcvftukn7zt2bfn.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Paul Quinn',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mk040olwrsi6r9za.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Philander Smith (AR)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/43ak6qyhboo0u9co.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Rust (MS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/gy8jyx1b3s1ronzs.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Southern University at New Orleans (LA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/75pnvl92dopvv2zl.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Stillman',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/fhml5wi3xx5gclta.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Talladega (AL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/tx5zz1ofxfnghopf.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Tougaloo (Miss.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/rm5x9uvuhcwmqfp5.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Virgin Islands',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ni6s1f44kf22dope.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Voorhees University',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/4vtoh5ygmslttgvp.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Wilberforce (OH)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/cmjh1h90xx32smn4.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Wiley (TX)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ije5fae78xmfj4mt.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 15 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Heart_of_America/teams?jsRendering=true
+  ✅ Found 15 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Baker...
+      ✅ Found JSON
+    🔍 Benedictine (KS)...
+      ✅ Found JSON
+    🔍 Central Methodist...
+      ✅ Found JSON
+    🔍 Clarke (IA)...
+      ✅ Found JSON
+    🔍 Culver-Stockton (MO)...
+      ✅ Found JSON
+    🔍 Graceland...
+      ✅ Found JSON
+    🔍 Grand View...
+      ✅ Found JSON
+    🔍 MidAmerica Nazarene...
+      ✅ Found JSON
+    🔍 Missouri Baptist...
+      ✅ Found JSON
+    🔍 Missouri Valley...
+      ✅ Found JSON
+    🔍 Mount Mercy...
+      ✅ Found JSON
+    🔍 Park...
+      ✅ Found JSON
+    🔍 Peru State...
+      ✅ Found JSON
+    🔍 William Penn (Iowa)...
+      ✅ Found JSON
+    🔍 William Woods...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Baker',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2dke2dg9d7epwrvh.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Benedictine (KS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/xnsyvh4xmn8zqgs8.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Central Methodist',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/zsa882elivq4sbky.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Clarke (IA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7qnhqi6v8b45gf6f.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Culver-Stockton (MO)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7ti872mk3gv6rmi8.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Graceland',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/80bxkgxkcntz7330.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Grand View',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/00akf2gq08y449mm.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'MidAmerica Nazarene',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/il4mdc03xf6t7b9d.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Missouri Baptist',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/h9yd19aa2lzifcap.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Missouri Valley',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9mi0x36ppunzcj3p.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Mount Mercy',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0f6s4kmveid2x5ia.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Park',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/lv1zwlk90a13f167.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Peru State',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ep5jp9uebux1jxi1.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'William Penn (Iowa)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ojd7b2jr0u3blf7x.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'William Woods',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/bcdg2lfcnqq8feqx.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 15 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/KCAC/teams?jsRendering=true
+  ✅ Found 14 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Avila (MO)...
+      ✅ Found JSON
+    🔍 Bethany (KS)...
+      ✅ Found JSON
+    🔍 Bethel (KS)...
+      ✅ Found JSON
+    🔍 Evangel (Mo.)...
+      ✅ Found JSON
+    🔍 Friends (KS)...
+      ✅ Found JSON
+    🔍 Kansas Wesleyan...
+      ✅ Found JSON
+    🔍 McPherson (Kan.)...
+      ✅ Found JSON
+    🔍 Oklahoma Wesleyan...
+      ✅ Found JSON
+    🔍 Ottawa (Kan.)...
+      ✅ Found JSON
+    🔍 Saint Mary...
+      ✅ Found JSON
+    🔍 Southwestern...
+      ✅ Found JSON
+    🔍 Sterling...
+      ✅ Found JSON
+    🔍 Tabor...
+      ✅ Found JSON
+    🔍 York (NE)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Avila (MO)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/rlgvoguijufju1we.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Bethany (KS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2s4os0g8vi9fjjeu.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Bethel (KS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/43m3k5wll3vupq1z.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Evangel (Mo.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/h3eht9n47fprdz4c.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Friends (KS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/28ww01qt1irstr83.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Kansas Wesleyan',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/dcszmb4z37picldp.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'McPherson (Kan.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/deeyr82q75j88pi9.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Oklahoma Wesleyan',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/03f7aes4dwqskjzm.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Ottawa (Kan.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2f01lzamkbef2fmr.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Saint Mary',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/71nh3jgot5qd4je0.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Southwestern',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/di6eopk91pm4ptok.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Sterling',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mdsct1ssyax3w0ux.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Tabor',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/jkk14em46uq8ub73.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'York (NE)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/edcndd376mpvg0ck.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 14 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Mid-South/teams?jsRendering=true
+  ✅ Found 7 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Bethel (TN)...
+      ✅ Found JSON
+    🔍 Campbellsville (KY)...
+      ✅ Found JSON
+    🔍 Cumberland (Tenn.)...
+      ✅ Found JSON
+    🔍 Cumberlands (Ky.)...
+      ✅ Found JSON
+    🔍 Freed-Hardeman (Tenn.)...
+      ✅ Found JSON
+    🔍 Georgetown (Ky.)...
+      ✅ Found JSON
+    🔍 Lindsey Wilson (Ky.)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Bethel (TN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/rop857y3wzih5xu3.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Campbellsville (KY)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mm3z1fwmxboxur07.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Cumberland (Tenn.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/58fkm9vx1agchalz.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Cumberlands (Ky.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/a8ctlz4mrw5lz47a.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Freed-Hardeman (Tenn.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/jwnyo2lpc3vnga4g.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Georgetown (Ky.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/dym98aepst44x1v4.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Lindsey Wilson (Ky.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/nmcwq9nsg0wbklvr.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 7 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Red_River/teams?jsRendering=true
+  ✅ Found 13 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Huston-Tillotson...
+      ✅ Found JSON
+    🔍 Jarvis Christian...
+      ✅ Found JSON
+    🔍 LSU Alexandria (La.)...
+      ✅ Found JSON
+    🔍 LSU Shreveport (La.)...
+      ✅ Found JSON
+    🔍 Louisiana Christian...
+      ✅ Found JSON
+    🔍 North American...
+      ✅ Found JSON
+    🔍 Our Lady of the Lake...
+      ✅ Found JSON
+    🔍 Paul Quinn...
+      ✅ Found JSON
+    🔍 Southwest...
+      ✅ Found JSON
+    🔍 Texas A&M  Texarkana...
+      ✅ Found JSON
+    🔍 Texas A&amp;M-San Antonio...
+      ✅ Found JSON
+    🔍 Texas College...
+      ✅ Found JSON
+    🔍 Xavier (La.)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Huston-Tillotson',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/5ntl0ve2k3oiv4dw.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Jarvis Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/fzos97hjkbw3n0n1.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'LSU Alexandria (La.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/iqzgom7h0ju1fq52.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'LSU Shreveport (La.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/t54lw39uy3l8i95f.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Louisiana Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/czem8ort9cz09oox.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'North American',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9r71j91ff2sxxq9x.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Our Lady of the Lake',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/b7xcmrqaq3jw1ihz.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Paul Quinn',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/jzx3as1gzqhzrb9x.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Southwest',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7bvubyk9jf99u6wq.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Texas A&M  Texarkana',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/13nr6yl4n1nynonm.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Texas A&amp;M-San Antonio',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/3yj6ce0c8yycm2vy.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Texas College',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/245b1fslxyrr21ai.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Xavier (La.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0df12pb14tenepxg.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 13 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/River_States/teams?jsRendering=true
+  ✅ Found 12 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Brescia (KY)...
+      ✅ Found JSON
+    🔍 IU Columbus...
+      ✅ Found JSON
+    🔍 IU Kokomo...
+      ✅ Found JSON
+    🔍 Indiana East...
+      ✅ Found JSON
+    🔍 Indiana Southeast...
+      ✅ Found JSON
+    🔍 Kentucky Christian...
+      ✅ Found JSON
+    🔍 Midway...
+      ✅ Found JSON
+    🔍 Oakland City (IN)...
+      ✅ Found JSON
+    🔍 Rio Grande...
+      ✅ Found JSON
+    🔍 Shawnee State...
+      ✅ Found JSON
+    🔍 St. Mary-Woods...
+      ✅ Found JSON
+    🔍 WVU Tech (WV)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Brescia (KY)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/6c2wxa01gb8kj2gh.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'IU Columbus',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2jbzd944amsfw7uk.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'IU Kokomo',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/kx8d4ogl9xomr7nd.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Indiana East',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/8vwua8nbm34lgbdm.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Indiana Southeast',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/t8p6ki9wijzg1pbo.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Kentucky Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/vysiphwx7nox4hl0.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Midway',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/b7cohdvvo3lfrb56.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Oakland City (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/cxttsfwd9d8ui0cx.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Rio Grande',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/rjjdfn81rv21zypb.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Shawnee State',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/o808yeyoqyxf7qzi.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'St. Mary-Woods',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/eoidoav77s1jknw9.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'WVU Tech (WV)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/cjvmcufvu6llqvyp.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 12 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Sooner/teams?jsRendering=true
+  ✅ Found 12 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Central Christian (KS)...
+      ✅ Found JSON
+    🔍 College of the Ozarks...
+      ✅ Found JSON
+    🔍 John Brown...
+      ✅ Found JSON
+    🔍 Langston (Okla.)...
+      ✅ Found JSON
+    🔍 Mid-America Christian...
+      ✅ Found JSON
+    🔍 Nelson (Texas)...
+      ✅ Found JSON
+    🔍 Oklahoma City...
+      ✅ Found JSON
+    🔍 Oklahoma Panhandle State...
+      ✅ Found JSON
+    🔍 Science and Arts...
+      ✅ Found JSON
+    🔍 Southwestern Christian...
+      ✅ Found JSON
+    🔍 Texas Wesleyan...
+      ✅ Found JSON
+    🔍 Wayland Baptist (TX)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Central Christian (KS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mqz8lztdcis4jler.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'College of the Ozarks',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/42btd352sasg786k.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'John Brown',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/y8ziuz9xkfnpagm4.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Langston (Okla.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/j08sh4mqj320sxcq.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Mid-America Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ey2zc8sfvv21k24i.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Nelson (Texas)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/k0vrp3bxv839vdth.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Oklahoma City',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mpoo76vo6j43nc1b.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Oklahoma Panhandle State',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/6g122touan13zcvz.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Science and Arts',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/kmxfjgfvoos1vezv.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Southwestern Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/6g67kx2orpp1d5jn.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Texas Wesleyan',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/32w8y7fygi8srltm.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Wayland Baptist (TX)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ifb9rcd3hbrf0rdw.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 12 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Southern_States/teams?jsRendering=true
+  ✅ Found 13 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Abraham Baldwin Agricultural...
+      ✅ Found JSON
+    🔍 Blue Mountain Christian (MS)...
+      ✅ Found JSON
+    🔍 Brewton-Parker (GA)...
+      ✅ Found JSON
+    🔍 Dalton State (GA)...
+      ✅ Found JSON
+    🔍 Faulkner (AL)...
+      ✅ Found JSON
+    🔍 Life...
+      ✅ Found JSON
+    🔍 Loyola (La.)...
+      ✅ Found JSON
+    🔍 Middle Georgia State...
+      ✅ Found JSON
+    🔍 Mobile (Ala.)...
+      ✅ Found JSON
+    🔍 Point...
+      ✅ Found JSON
+    🔍 Tennessee Southern...
+      ✅ Found JSON
+    🔍 Thomas...
+      ✅ Found JSON
+    🔍 William Carey (Miss.)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Abraham Baldwin Agricultural',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7ovx9ct5qj200e2e.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Blue Mountain Christian (MS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/skzdyceviagoc1eb.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Brewton-Parker (GA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/xwktikhg9dglsw4h.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Dalton State (GA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/8f0gpnid3vlgwjw6.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Faulkner (AL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/a1jgon8f4hwhuj6g.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Life',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9v7meboyv88on4na.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Loyola (La.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0a6fp9f0py4ncpd1.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Middle Georgia State',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/6p1hxz3yjfik562i.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Mobile (Ala.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/yqn7hpbu8afw8sqp.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Point',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ynqzhufd5m1fnh5f.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Tennessee Southern',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/j9vfdbcwao1ex2t4.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Thomas',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7rw05olr4fewffny.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'William Carey (Miss.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/8d9rvfbac9677e55.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 13 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/The_Sun/teams?jsRendering=true
+  ✅ Found 9 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Ave Maria...
+      ✅ Found JSON
+    🔍 Coastal Georgia...
+      ✅ Found JSON
+    🔍 Florida Memorial...
+      ✅ Found JSON
+    🔍 Keiser (Fla.)...
+      ✅ Found JSON
+    🔍 New College of Florida...
+      ✅ Found JSON
+    🔍 Southeastern (Fla.)...
+      ✅ Found JSON
+    🔍 St. Thomas (Fla.)...
+      ✅ Found JSON
+    🔍 Warner (FL)...
+      ✅ Found JSON
+    🔍 Webber International (FL)...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Ave Maria',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qx4f5rsc0eriy8km.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Coastal Georgia',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/w0knl6cpiwcplyi6.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Florida Memorial',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/z9lypwqlhd5u4i9d.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Keiser (Fla.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/5fsku8nsnx6wu5el.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'New College of Florida',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/o1s8y7t697kgwglo.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Southeastern (Fla.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/bbefpsprq4iww70x.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'St. Thomas (Fla.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ig0wsst5y3nf909d.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Warner (FL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ympwm0xsrtbss5dv.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Webber International (FL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/hde39dioprem1wwl.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 9 team(s)
+
+🚀 Extracting teams from single conference...
+═══════════════════════════════════════════════════════════
+
+
+🔍 Fetching conference page: https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Wolverine-Hoosier/teams?jsRendering=true
+  ✅ Found 12 teams
+
+  📊 Visiting each team page to extract JSON URLs...
+
+    🔍 Aquinas (Mich.)...
+      ✅ Found JSON
+    🔍 Cleary (MI)...
+      ✅ Found JSON
+    🔍 Cornerstone...
+      ✅ Found JSON
+    🔍 Defiance College (OH)...
+      ✅ Found JSON
+    🔍 Indiana Tech...
+      ✅ Found JSON
+    🔍 Lawrence Tech...
+      ✅ Found JSON
+    🔍 Lourdes...
+      ✅ Found JSON
+    🔍 Madonna (Mich.)...
+      ✅ Found JSON
+    🔍 Michigan-Dearborn...
+      ✅ Found JSON
+    🔍 Northwestern Ohio...
+      ✅ Found JSON
+    🔍 Rochester Christian (Mich.)...
+      ✅ Found JSON
+    🔍 Siena Heights...
+      ✅ Found JSON
+
+═══════════════════════════════════════════════════════════
+📋 RESULTS - Add these to config/teams.js:
+═══════════════════════════════════════════════════════════
+
+  {
+    name: 'Aquinas (Mich.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qt8zi4e7fi3d9822.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Cleary (MI)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/y1c07998xyo96z3f.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Cornerstone',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/yowe2ihb3x0s57ki.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Defiance College (OH)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/fkbl469rff7uozfa.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Indiana Tech',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ovuabkdpbgfesti2.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Lawrence Tech',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2zedt96z7nko4874.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Lourdes',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/xah7lzr8zfbhcgte.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Madonna (Mich.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/xe7gv016i10uoc6v.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Michigan-Dearborn',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/eaugxtoc5azt9bqw.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Northwestern Ohio',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qvshurr30id7torq.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Rochester Christian (Mich.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/bl3wfshkutiszsjb.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+  {
+    name: 'Siena Heights',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/f7kfaycoyllojha9.json',
+    conference: 'CONFERENCE_NAME_HERE'
+  },
+
+═══════════════════════════════════════════════════════════
+✅ Successfully extracted 12 team(s)
+

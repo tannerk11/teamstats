@@ -17,38 +17,108 @@
       </div>
     </header>
 
-    <div id="loading" class="loading">Loading data...</div>
     <div id="error" class="error" style="display: none;"></div>
 
-    <div class="table-controls">
-      <select id="splitSelector">
-        <optgroup label="Competition">
-          <option value="conference" selected>Conference</option>
-          <option value="overall">Overall</option>
-          <option value="division">Division</option>
-          <option value="national">National</option>
-        </optgroup>
-        <optgroup label="Location">
-          <option value="home">Home</option>
-          <option value="away">Away</option>
-          <option value="neutral">Neutral Site</option>
-        </optgroup>
-        <optgroup label="Win/Loss">
-          <option value="inWins">In Wins</option>
-          <option value="inLosses">In Losses</option>
-        </optgroup>
-        <optgroup label="Monthly">
-          <option value="november">November</option>
-          <option value="december">December</option>
-          <option value="january">January</option>
-          <option value="february">February</option>
-          <option value="march">March</option>
-        </optgroup>
-      </select>
+    <div class="filter-controls">
+      <div class="tab-container">
+        <button class="tab-button active" data-tab="simple">Pre-calculated Splits</button>
+        <button class="tab-button" data-tab="custom">Custom Filters</button>
+      </div>
+
+      <div id="simpleFilters" class="filter-section active">
+        <div class="filter-group">
+          <label for="conferenceSimpleFilter">Conference:</label>
+          <select id="conferenceSimpleFilter">
+            <option value="">All Conferences</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="splitSelector">Split:</label>
+          <select id="splitSelector">
+            <optgroup label="Competition">
+              <option value="conference" selected>Conference</option>
+              <option value="overall">Overall</option>
+              <option value="division">Division</option>
+              <option value="national">National</option>
+            </optgroup>
+            <optgroup label="Location">
+              <option value="home">Home</option>
+              <option value="away">Away</option>
+              <option value="neutral">Neutral Site</option>
+            </optgroup>
+            <optgroup label="Win/Loss">
+              <option value="inWins">In Wins</option>
+              <option value="inLosses">In Losses</option>
+            </optgroup>
+            <optgroup label="Monthly">
+              <option value="november">November</option>
+              <option value="december">December</option>
+              <option value="january">January</option>
+              <option value="february">February</option>
+              <option value="march">March</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <div id="customFilters" class="filter-section">
+        <div class="filter-group">
+          <label for="conferenceCustomFilter">Conference:</label>
+          <select id="conferenceCustomFilter">
+            <option value="">All Conferences</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="locationFilter">Location:</label>
+          <select id="locationFilter">
+            <option value="">All</option>
+            <option value="home">Home</option>
+            <option value="away">Away</option>
+            <option value="neutral">Neutral</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="competitionFilter">Competition:</label>
+          <select id="competitionFilter">
+            <option value="">All</option>
+            <option value="conference">Conference</option>
+            <option value="division">Division</option>
+            <option value="national">National</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="winLossFilter">Result:</label>
+          <select id="winLossFilter">
+            <option value="">All</option>
+            <option value="wins">Wins</option>
+            <option value="losses">Losses</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="monthFilter">Month:</label>
+          <select id="monthFilter">
+            <option value="">All</option>
+            <option value="november">November</option>
+            <option value="december">December</option>
+            <option value="january">January</option>
+            <option value="february">February</option>
+            <option value="march">March</option>
+            <option value="april">April</option>
+          </select>
+        </div>
+
+        <button id="applyFilters" class="apply-filters-btn">Apply Filters</button>
+      </div>
     </div>
 
     <div class="table-outside">
       <div class="table-container">
+        <div id="loading" class="loading">Loading data...</div>
         <table id="statsTable">
           <thead>
             <tr id="tableHeader">
@@ -66,11 +136,9 @@
     <div class="charts-section">
       <div class="chart-container">
         <div class="chart-header">
-          <h2 id="chartTitle">Net Points Per Possession (PPP)</h2>
+          <h2 id="chartTitle">Net Rating (NRTG)</h2>
           <select id="chartStatSelector">
-            <option value="netPointsPerPossession">Net PPP</option>
-            <option value="pointsPerPossession">Offensive PPP</option>
-            <option value="oppPointsPerPossession">Defensive PPP (Opp)</option>
+            <option value="netRating">Net Rating (NRTG)</option>
             <option value="offensiveRating">Offensive Rating (ORTG)</option>
             <option value="defensiveRating">Defensive Rating (DRTG)</option>
             <option value="efgPct">Effective FG%</option>
@@ -112,6 +180,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=19"></script>
+  <script src="app.js?v=22"></script>
 </body>
 </html>
