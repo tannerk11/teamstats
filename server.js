@@ -94,6 +94,11 @@ app.get('/api/stats', async (req, res) => {
       console.log(`✅ Calculated ${statistics.length} teams with ${splitType} split`);
     }
     
+    // Set cache-control headers to prevent browser caching
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    
     res.json({
       success: true,
       lastUpdated: new Date().toISOString(),

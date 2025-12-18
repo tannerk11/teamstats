@@ -37,16 +37,20 @@ async function fetchStats(customFilters = null) {
       if (customFilters.winLoss) params.append('winLoss', customFilters.winLoss);
       if (customFilters.month) params.append('month', customFilters.month);
       if (currentConference) params.append('conference', currentConference);
+      params.append('_t', Date.now()); // Cache-busting parameter
       url += '?' + params.toString();
       console.log('Fetching with custom filters:', url, customFilters);
     } else {
       // Default to overall stats with no filters
       url += '?split=overall';
       if (currentConference) url += `&conference=${currentConference}`;
+      url += `&_t=${Date.now()}`; // Cache-busting parameter
       console.log('Fetching overall stats:', url);
     }
     
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      cache: 'no-store' // Disable browser caching
+    });
     const result = await response.json();
     const loadTime = ((performance.now() - startTime) / 1000).toFixed(2);
     console.log(`✅ Received ${result.data.length} teams in ${loadTime}s`);
@@ -308,8 +312,8 @@ function getColumnLabel(columnKey) {
 function formatValue(value, columnKey) {
   if (value == null) return '-';
   
-  // Return certain fields as-is (like win-loss record, rank)
-  if (columnKey === 'record' || columnKey === 'wins' || columnKey === 'losses' || columnKey === 'rank' || columnKey === 'netRatingRank') {
+  // Return certain fields as-is (like win-loss record, rank, games played)
+  if (columnKey === 'record' || columnKey === 'wins' || columnKey === 'losses' || columnKey === 'gp' || columnKey === 'rank' || columnKey === 'netRatingRank') {
     return value;
   }
   
