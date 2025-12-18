@@ -23,10 +23,12 @@ async function fetchStats(split = currentSplit, customFilters = null) {
   const statsTable = document.getElementById('statsTable');
   
   loading.style.display = 'block';
+  loading.innerHTML = '<div class="spinner"></div> Loading stats...';
   error.style.display = 'none';
   statsTable.style.display = 'none';
   
   try {
+    const startTime = performance.now();
     let url = API_URL;
     
     if (customFilters) {
@@ -36,16 +38,19 @@ async function fetchStats(split = currentSplit, customFilters = null) {
       if (customFilters.competition) params.append('competition', customFilters.competition);
       if (customFilters.winLoss) params.append('winLoss', customFilters.winLoss);
       if (customFilters.month) params.append('month', customFilters.month);
+      if (currentConference) params.append('conference', currentConference);
       url += '?' + params.toString();
       console.log('Fetching with custom filters:', url, customFilters);
     } else {
       url += `?split=${split}`;
+      if (currentConference) url += `&conference=${currentConference}`;
       console.log('Fetching with split:', url);
     }
     
     const response = await fetch(url);
     const result = await response.json();
-    console.log('Received data:', result.data.length, 'teams', result.data[0]);
+    const loadTime = ((performance.now() - startTime) / 1000).toFixed(2);
+    console.log(`✅ Received ${result.data.length} teams in ${loadTime}s`);
     
     if (result.success) {
       allStatsData = result.data;
@@ -62,6 +67,8 @@ async function fetchStats(split = currentSplit, customFilters = null) {
       renderCharts();
       loading.style.display = 'none';
       statsTable.style.display = 'table';
+      
+      console.log(`⚡ Total load time: ${loadTime}s`);
     } else {
       throw new Error(result.error || 'Failed to fetch data');
     }
