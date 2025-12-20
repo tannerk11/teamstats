@@ -1,0 +1,663 @@
+// 2024-25 Season Teams (Full Extraction - 132 teams)
+export const TEAMS_2024_25_FULL = [
+  {
+    name: 'Bluefield (VA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/jsab6o4h66wkulwr.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Bryan (TN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2dc69bz8inw55qks.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'CIU (SC)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/66d82tbohtosmtsv.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Columbia (SC)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/emndsrivabhdw1zb.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Johnson (TN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ee1vs6xps0lue1eo.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Kentucky Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/baakq8j322mpy6gb.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Milligan (TN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/gyxbmcg1h7na4zna.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Montreat (NC)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0ijah32p2qpu9ehy.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Pikeville (KY)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/1q4mwp31df1y8xgs.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Reinhardt (Ga.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/5u2s6ic7a2nrq9nh.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'St. Andrews (NC)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/1murk8h8bdmz5cdn.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Tennessee Wesleyan',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/38cxlids1ryhgzuy.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Truett McConnell',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7xfv9nm3huc6ionz.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Union Commonwealth',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/oxtnobhy2xxthdka.json',
+    conference: 'Appalachian'
+  },
+  {
+    name: 'Central Baptist (Ark.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/84cn3s8ghoccscm0.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'Columbia (MO)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/5pgro7tafbf0trt4.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'Crowley\'s Ridge (AR)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qym03coui37tkznf.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'Hannibal-LaGrange (MO)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/pteke9ftl5dn79wc.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'Harris-Stowe (MO)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/09rxbfisdqj24nmv.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'Mission (Mo.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/oqbfcye6bu1y2xmo.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'Missouri Baptist',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/264bw078inirmguc.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'UHSP',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/a9lz5bw99e2s4h0n.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'William Woods',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/46fm9of1hgqop0cp.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'Williams Baptist (AR)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/nhfnawr115rrmfth.json',
+    conference: 'American_Midwest'
+  },
+  {
+    name: 'Bushnell (OR)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/l2e4jplzihn39gfu.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'College of Idaho',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/f7v4ggaemf9uakjq.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Corban',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/3c61o7yjr2n3ki2x.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Eastern Oregon',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/4b0qxarakqnrz0bb.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Evergreen (WA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/bb1iteveqfhhou6p.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Lewis-Clark State (Idaho)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/4s4ickykdmcr5ss1.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Multnomah',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0wojsnaekexy3pnm.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Northwest (WA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/4nu88j6l8ra8fiqs.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Oregon Tech',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/295achyjeysbnto4.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Southern Oregon',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/57mov2juqpbp6taa.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Walla Walla',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/1w8bp42bm5prquyg.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Warner Pacific (OR)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2i7rdu53cpcdohi1.json',
+    conference: 'Cascade'
+  },
+  {
+    name: 'Calumet (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/3m07p9pnioqpmdx1.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Governors State',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/cezissxlingki0ia.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Holy Cross (Ind.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/azl7wcfiadz39g4x.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Indiana Northwest',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/hndg44d3nyejs75s.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Indiana South Bend (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/g4erokvl02ldxz5r.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Judson (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/b06otktz19hhxs07.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Olivet Nazarene (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/dn7gho3v6tbd8z4p.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Saint Xavier (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/jeio170m6aymwz2y.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'St. Ambrose (IA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2mwmtoazc4y241g9.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'St. Francis (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qzxkfjxkn858gurq.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Trinity Christian (IL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ecy19nqqdwtyjy6h.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Viterbo',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/78dx6mh44cbd270v.json',
+    conference: 'Chicagoland'
+  },
+  {
+    name: 'Arkansas Baptist',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0e6oxtt63pk3gmvo.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Carolina (N.C.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/n8m2oywnxlu2225g.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Fisher (MA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/k1n83lqxdl3r9g8t.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Florida College (FL)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/edrqttyy2antrasf.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Florida National',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ev2s1y7otlfym79k.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Haskell Indian Nations University',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qysbnirz9blcgd82.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Morris',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/lnud10a7399xfuh0.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Northern New Mexico',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/m5cui62oru7aeg7d.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Spartanburg Methodist',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/19kzfct4xdvj3u8m.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Washington Adventist (MD)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/4wo71vkaxzj18h1w.json',
+    conference: 'Continental'
+  },
+  {
+    name: 'Bethel (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mw3u4zgauvl5xj9q.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Goshen (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/wolzbymtn4yrh92y.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Grace (Ind.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/4mylq43vskagl76a.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Huntington (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/clfmuux13t9f688l.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Indiana Wesleyan',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ixao0d4zn0rhutix.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Marian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0von3g5ewiugeksb.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Mount Vernon Nazarene (OH)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/10pg4mwoyjis0yzo.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Saint Francis (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/dvla58mok251my5n.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Spring Arbor (Mich.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/kpcery3f8fcclcfi.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Taylor (IN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/qn7xmb353b4iip22.json',
+    conference: 'Crossroads'
+  },
+  {
+    name: 'Carroll (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ftoq38h4uwznrl7e.json',
+    conference: 'Frontier'
+  },
+  {
+    name: 'Montana State-Northern (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/86cfpffsm4ayqn7b.json',
+    conference: 'Frontier'
+  },
+  {
+    name: 'Montana Tech (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/755w9dwumsmhc0o8.json',
+    conference: 'Frontier'
+  },
+  {
+    name: 'Montana Western (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/8pbto88udhv2g7q9.json',
+    conference: 'Frontier'
+  },
+  {
+    name: 'Providence (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/fj87cdpadblyehpd.json',
+    conference: 'Frontier'
+  },
+  {
+    name: 'Rocky Mountain (MT)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/6m4scaxnqer4cvnq.json',
+    conference: 'Frontier'
+  },
+  {
+    name: 'Briar Cliff (IA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mfh5v89tb993476h.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Concordia (Neb.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/col7ugca1ewh6gtr.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Dakota Wesleyan (SD)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2lc6gn461vs00clt.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Doane (NE)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/4rfu9eb0a9w8qzpg.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Dordt (IA)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/15ac7gqcfjd6wtp1.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Hastings',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/b270o73wxqzhqd01.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Midland',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/h7bkiw7tvsaae2tm.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Morningside (Iowa)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9ivtolflz5jawv0l.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Mount Marty',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/c92r0wux1frifh1l.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Northwestern (Iowa)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/028572pibynveypy.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Waldorf',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/f5aatibm9bl03k70.json',
+    conference: 'Great_Plains'
+  },
+  {
+    name: 'Avila (MO)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/77pahz22a55fb7iz.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Bethany (KS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9wp9akhcel6n3xob.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Bethel (KS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/5j1vmdwu6ryl9w1r.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Evangel (Mo.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/2zx6andzrjx0bl98.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Friends (KS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9uwdoh0jumd499n5.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Kansas Wesleyan',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/nrgbwbnrcb32pkld.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'McPherson (Kan.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/kec6v28qf4ge5nr3.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Oklahoma Wesleyan',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/3m2azdylvz5ddhwc.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Ottawa (Kan.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mupxv4lrre2wq6j6.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Saint Mary',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/04fstwpgkydva9hh.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Southwestern',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/8qgypugl6whi46yc.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Sterling',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/crju8qcf9axchxqx.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Tabor',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/m4pfcwkuteml56oi.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'York (NE)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/1vk6i1tmkthskled.json',
+    conference: 'KCAC'
+  },
+  {
+    name: 'Bethel (TN)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/w4xpgv2p20j73anp.json',
+    conference: 'Mid-South'
+  },
+  {
+    name: 'Campbellsville (KY)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7ajohq2wzzx0fo38.json',
+    conference: 'Mid-South'
+  },
+  {
+    name: 'Cumberland (Tenn.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/0y16tghlv316zxpa.json',
+    conference: 'Mid-South'
+  },
+  {
+    name: 'Cumberlands (Ky.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/6isgm55a7e2p1vhn.json',
+    conference: 'Mid-South'
+  },
+  {
+    name: 'Freed-Hardeman (Tenn.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7co99ulb35bj39fs.json',
+    conference: 'Mid-South'
+  },
+  {
+    name: 'Georgetown (Ky.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/4t7vtejnch1ng66s.json',
+    conference: 'Mid-South'
+  },
+  {
+    name: 'Lindsey Wilson (Ky.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7y5sm6ke5hznvt78.json',
+    conference: 'Mid-South'
+  },
+  {
+    name: 'Huston-Tillotson',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/sqciuzje71zh68qi.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Jarvis Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/a8px6k3ku0d3k574.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'LSU Alexandria (La.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/498wi1zgu35zxgor.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'LSU Shreveport (La.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ttyegodu299lynvk.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Louisiana Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/6jaq63iux98iblui.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'North American',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ehr44qlu82i72vge.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Our Lady of the Lake',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/gqkksxexk0ih89sk.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Paul Quinn',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/097z3ekdya52gahc.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Southwest',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9ddewhlbfm8os33z.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Texas A&M  Texarkana',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/q8rf0g7v60spl2sb.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Texas A&amp;M-San Antonio',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/rn82xhwfjwh2ay2e.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Texas College',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/h72nz3kqr8evnc7o.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Xavier (La.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/86x30luq4uin8kws.json',
+    conference: 'Red_River'
+  },
+  {
+    name: 'Central Christian (KS)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/i69bv4vkilokj03p.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'College of the Ozarks',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/ee2601shte8ivytd.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'John Brown',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/bfdj01xu0x3zgc0e.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'Langston (Okla.)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/gy1sh1z3z6k3encx.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'Mid-America Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/1x8mb12ftayd4gq5.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'Nelson (Texas)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/azz4fy18qlgwrjxd.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'Oklahoma City',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/gycxqaqj4pnibh9n.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'Oklahoma Panhandle State',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/o5d2zfsy7140bdwg.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'Science and Arts',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/fzpyib5es80g7qpu.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'Southwestern Christian',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/f6cibdi4nc11kbdl.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'Texas Wesleyan',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/11qvvx356zlyhm4y.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'UNT Dallas',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/k3l7u4byik8cftdc.json',
+    conference: 'Sooner'
+  },
+  {
+    name: 'Wayland Baptist (TX)',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/3q3e0x35tpz7n19f.json',
+    conference: 'Sooner'
+  }
+];

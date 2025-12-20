@@ -1,19 +1,51 @@
 // Scout page - Individual team analysis
-import { SEASONS } from '../config/seasons.js';
-import { TEAMS_BY_SEASON } from '../config/teams.js';
+
+// API URLs
+const SEASONS_API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api/seasons'
+  : '/api/seasons';
+
+const TEAM_API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api/team'
+  : '/api/team';
+
+const PLAYERS_API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api/players'
+  : '/api/players';
 
 // State management
 let selectedSeason = null;
 let selectedConference = null;
 let selectedTeam = null;
 let teamData = null;
+let rosterData = [];
 let currentScheduleFilter = 'all';
+let currentRosterFilter = 'all';
+let SEASONS = [];
+let TEAMS_BY_SEASON = {};
 
 // Initialize page
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadSeasons();
   initializeSelectors();
   attachEventListeners();
 });
+
+// Load seasons from API
+async function loadSeasons() {
+  try {
+    const response = await fetch(SEASONS_API_URL);
+    if (!response.ok) {
+      throw new Error('Failed to load seasons');
+    }
+    const data = await response.json();
+    SEASONS = data.seasons;
+    TEAMS_BY_SEASON = data.teamsBySeason;
+  } catch (error) {
+    console.error('Error loading seasons:', error);
+    showError('Failed to load seasons. Please refresh the page.');
+  }
+}
 
 // Initialize season, conference, and team selectors
 function initializeSelectors() {
@@ -24,8 +56,17 @@ function initializeSelectors() {
     const option = document.createElement('option');
     option.value = season.id;
     option.textContent = season.label;
+    if (season.isCurrent) {
+      option.selected = true;
+      selectedSeason = season.id; // Set the current season
+    }
     seasonSelect.appendChild(option);
   });
+  
+  // Populate conferences for the initial season
+  if (selectedSeason) {
+    populateConferences();
+  }
 }
 
 // Attach event listeners
@@ -35,12 +76,22 @@ function attachEventListeners() {
   document.getElementById('teamSelect').addEventListener('change', onTeamChange);
   
   // Schedule filter buttons
-  document.querySelectorAll('.filter-btn').forEach(btn => {
+  document.querySelectorAll('#scheduleSection .filter-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#scheduleSection .filter-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
       currentScheduleFilter = e.target.dataset.filter;
       renderSchedule();
+    });
+  });
+  
+  // Roster filter buttons
+  document.querySelectorAll('#rosterSection .filter-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('#rosterSection .filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      currentRosterFilter = e.target.dataset.filter;
+      displayRoster();
     });
   });
 }
@@ -163,7 +214,8 @@ async function loadTeamData() {
     document.getElementById('error').style.display = 'none';
     hideTeamData();
     
-    const response = await fetch(selectedTeam);
+    // Fetch through our API proxy to avoid CORS issues
+    const response = await fetch(`${TEAM_API_URL}?url=${encodeURIComponent(selectedTeam)}`);
     if (!response.ok) {
       throw new Error(`Failed to load team data: ${response.status}`);
     }
@@ -189,7 +241,7 @@ function displayTeamData() {
   document.getElementById('teamInfo').style.display = 'block';
   document.getElementById('teamName').textContent = teamName;
   
-  const overallStats = calculateSplitStats(teamData.schedule);
+  const overallStats = calculateSplitStats(teamData.events || []);
   document.getElementById('teamRecord').textContent = 
     `${overallStats.wins}-${overallStats.losses} (${overallStats.winPct})`;
   document.getElementById('teamConference').textContent = selectedConference;
@@ -197,13 +249,16 @@ function displayTeamData() {
   // Calculate and display splits
   displaySplits();
   
+  // Load and display roster
+  loadRoster(teamName);
+  
   // Display schedule
   displaySchedule();
 }
 
 // Calculate stats for a subset of games
-function calculateSplitStats(games) {
-  if (!games || games.length === 0) {
+function calculateSplitStats(events) {
+  if (!events || events.length === 0) {
     return {
       gp: 0, wins: 0, losses: 0, winPct: '.000',
       ppg: 0, oppg: 0, margin: 0,
@@ -212,7 +267,13 @@ function calculateSplitStats(games) {
     };
   }
   
-  const completed = games.filter(g => g.score && g.opponentScore);
+  // Filter for completed games with scores
+  const completed = events.filter(e => 
+    e.event && 
+    e.event.result && 
+    e.event.result.hasScores
+  );
+  
   const gp = completed.length;
   
   if (gp === 0) {
@@ -231,27 +292,46 @@ function calculateSplitStats(games) {
   let totalFTM = 0, totalFTA = 0;
   let totalReb = 0, totalAst = 0, totalTO = 0, totalStl = 0, totalBlk = 0;
   
-  completed.forEach(game => {
-    const pts = parseInt(game.score) || 0;
-    const oppPts = parseInt(game.opponentScore) || 0;
+  completed.forEach(eventData => {
+    const event = eventData.event;
+    const stats = eventData.stats || {};
     
-    if (pts > oppPts) wins++;
-    else if (pts < oppPts) losses++;
+    // Determine if win or loss
+    if (event.result.description === 'Win') {
+      wins++;
+    } else if (event.result.description === 'Loss') {
+      losses++;
+    }
+    
+    // Get scores from result
+    const scores = event.result.numericResults || [];
+    const pts = scores[0] || 0;
+    const oppPts = scores[1] || 0;
     
     totalPts += pts;
     totalOppPts += oppPts;
     
-    if (game.fgm !== undefined) totalFGM += game.fgm;
-    if (game.fga !== undefined) totalFGA += game.fga;
-    if (game.fg3m !== undefined) total3PM += game.fg3m;
-    if (game.fg3a !== undefined) total3PA += game.fg3a;
-    if (game.ftm !== undefined) totalFTM += game.ftm;
-    if (game.fta !== undefined) totalFTA += game.fta;
-    if (game.reb !== undefined) totalReb += game.reb;
-    if (game.ast !== undefined) totalAst += game.ast;
-    if (game.to !== undefined) totalTO += game.to;
-    if (game.stl !== undefined) totalStl += game.stl;
-    if (game.blk !== undefined) totalBlk += game.blk;
+    // Parse stats (they're stored as strings in the stats object)
+    const fgp = stats.fgp || '0-0';
+    const [fgm, fga] = fgp.split('-').map(n => parseInt(n) || 0);
+    totalFGM += fgm;
+    totalFGA += fga;
+    
+    const fgp3 = stats.fgp3 || '0-0';
+    const [fg3m, fg3a] = fgp3.split('-').map(n => parseInt(n) || 0);
+    total3PM += fg3m;
+    total3PA += fg3a;
+    
+    const ftp = stats.ftp || '0-0';
+    const [ftm, fta] = ftp.split('-').map(n => parseInt(n) || 0);
+    totalFTM += ftm;
+    totalFTA += fta;
+    
+    totalReb += parseInt(stats.treb) || 0;
+    totalAst += parseInt(stats.ast) || 0;
+    totalTO += parseInt(stats.to) || 0;
+    totalStl += parseInt(stats.stl) || 0;
+    totalBlk += parseInt(stats.blk) || 0;
   });
   
   return {
@@ -275,36 +355,40 @@ function calculateSplitStats(games) {
 
 // Display splits table
 function displaySplits() {
-  const schedule = teamData.schedule || [];
+  const events = teamData.events || [];
+  
+  // Get completed games for wins/losses splits
+  const completedGames = events.filter(e => e.event && e.event.result && e.event.result.hasScores);
+  const wins = completedGames.filter(e => e.event.result.description === 'Win');
+  const losses = completedGames.filter(e => e.event.result.description === 'Loss');
   
   // Calculate different splits
-  const overall = calculateSplitStats(schedule);
-  const home = calculateSplitStats(schedule.filter(g => g.location === 'home'));
-  const away = calculateSplitStats(schedule.filter(g => g.location === 'away'));
-  const neutral = calculateSplitStats(schedule.filter(g => g.location === 'neutral'));
-  const conference = calculateSplitStats(schedule.filter(g => g.conference === true));
-  const nonConference = calculateSplitStats(schedule.filter(g => g.conference === false));
-  
-  const splits = [
-    { name: 'Overall', ...overall },
-    { name: 'Home', ...home },
-    { name: 'Away', ...away },
-    { name: 'Neutral', ...neutral },
-    { name: 'Conference', ...conference },
-    { name: 'Non-Conference', ...nonConference }
-  ];
+  const overall = calculateSplitStats(events);
+  const home = calculateSplitStats(events.filter(e => e.event && e.event.home === true));
+  const away = calculateSplitStats(events.filter(e => e.event && e.event.home === false && !e.event.neutralSite));
+  const conference = calculateSplitStats(events.filter(e => e.event && e.event.conference === true));
+  const last5 = calculateSplitStats(completedGames.slice(-5));
+  const last10 = calculateSplitStats(completedGames.slice(-10));
+  const inWins = calculateSplitStats(wins);
+  const inLosses = calculateSplitStats(losses);
   
   const tbody = document.getElementById('splitsBody');
   tbody.innerHTML = '';
   
-  splits.forEach(split => {
-    if (split.gp > 0) {
-      const row = createSplitRow(split);
-      tbody.appendChild(row);
-    }
-  });
+  // Add rows in desired order
+  if (overall.gp > 0) tbody.appendChild(createSplitRow({ name: 'Overall', ...overall }));
+  if (conference.gp > 0) tbody.appendChild(createSplitRow({ name: 'Conference', ...conference }));
+  if (last5.gp > 0) tbody.appendChild(createSplitRow({ name: 'Last 5', ...last5 }));
+  if (last10.gp > 0) tbody.appendChild(createSplitRow({ name: 'Last 10', ...last10 }));
+  if (home.gp > 0) tbody.appendChild(createSplitRow({ name: 'Home', ...home }));
+  if (away.gp > 0) tbody.appendChild(createSplitRow({ name: 'Away', ...away }));
+  if (inWins.gp > 0) tbody.appendChild(createSplitRow({ name: 'In Wins', ...inWins }));
+  if (inLosses.gp > 0) tbody.appendChild(createSplitRow({ name: 'In Losses', ...inLosses }));
   
   document.getElementById('splitsSection').style.display = 'block';
+  
+  // Initialize sorting handlers
+  initializeSplitsTableSorting();
 }
 
 // Create a split row
@@ -333,15 +417,104 @@ function createSplitRow(split) {
   return row;
 }
 
+// Load roster data
+async function loadRoster(teamName) {
+  try {
+    // Determine stat type based on filter
+    const statType = currentRosterFilter === 'conference' ? 'statsConference' : 'stats';
+    const url = `${PLAYERS_API_URL}?season=${selectedSeason}&team=${encodeURIComponent(teamName)}&statType=${statType}`;
+    console.log('🏀 Loading roster for:', teamName, 'with statType:', statType);
+    console.log('🔗 Roster URL:', url);
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to load roster: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    console.log('📊 Roster response:', result);
+    console.log('👥 Number of players:', result.data ? result.data.length : 0);
+    
+    rosterData = result.data || [];
+    
+    renderRoster();
+  } catch (error) {
+    console.error('Error loading roster:', error);
+    document.getElementById('rosterSection').style.display = 'none';
+  }
+}
+
+// Display roster table
+async function displayRoster() {
+  // If filter changed, reload data
+  const teamSelect = document.getElementById('teamSelect');
+  const teamName = teamSelect.options[teamSelect.selectedIndex]?.dataset.name;
+  
+  if (teamName) {
+    await loadRoster(teamName);
+    return;
+  }
+  
+  // Otherwise just render existing data
+  renderRoster();
+}
+
+// Render roster table with current data
+function renderRoster() {
+  const tbody = document.getElementById('rosterBody');
+  tbody.innerHTML = '';
+  
+  console.log('📋 Displaying roster with', rosterData.length, 'players');
+  
+  if (rosterData.length === 0) {
+    const row = document.createElement('tr');
+    row.innerHTML = '<td colspan="8" style="text-align: center;">No roster data available</td>';
+    tbody.appendChild(row);
+    document.getElementById('rosterSection').style.display = 'block';
+  } else {
+    rosterData.forEach(player => {
+      console.log('👤 Player:', player.fullName, player);
+      const row = createRosterRow(player);
+      tbody.appendChild(row);
+    });
+    document.getElementById('rosterSection').style.display = 'block';
+    
+    // Initialize sorting handlers
+    initializeRosterTableSorting();
+  }
+}
+
+// Create a roster row
+function createRosterRow(player) {
+  const row = document.createElement('tr');
+  
+  const fgPct = player.fgpt || '0.0';
+  const fg3Pct = player.fgpt3 || '0.0';
+  const ftPct = player.ftpt || '0.0';
+  
+  row.innerHTML = `
+    <td class="sticky-col">${player.fullName}</td>
+    <td>${player.gp || 0}</td>
+    <td>${player.ptspg || '0.0'}</td>
+    <td>${player.trebpg || '0.0'}</td>
+    <td>${player.astpg || '0.0'}</td>
+    <td>${fgPct}</td>
+    <td>${fg3Pct}</td>
+    <td>${ftPct}</td>
+  `;
+  
+  return row;
+}
+
 // Display schedule
 function displaySchedule() {
-  const schedule = teamData.schedule || [];
+  const events = teamData.events || [];
   
-  // Calculate records for summary
-  const allGames = schedule.filter(g => g.score && g.opponentScore);
-  const confGames = allGames.filter(g => g.conference === true);
-  const homeGames = allGames.filter(g => g.location === 'home');
-  const awayGames = allGames.filter(g => g.location === 'away');
+  // Calculate records for summary - filter for completed games with scores
+  const allGames = events.filter(e => e.event && e.event.result && e.event.result.hasScores);
+  const confGames = allGames.filter(e => e.event.conference === true);
+  const homeGames = allGames.filter(e => e.event.home === true);
+  const awayGames = allGames.filter(e => e.event.home === false && !e.event.neutralSite);
   const last10 = allGames.slice(-10);
   
   document.getElementById('overallRecord').textContent = getRecordString(allGames);
@@ -356,19 +529,19 @@ function displaySchedule() {
 
 // Render schedule based on current filter
 function renderSchedule() {
-  const schedule = teamData.schedule || [];
-  let filteredSchedule = [...schedule];
+  const events = teamData.events || [];
+  let filteredSchedule = [...events];
   
   // Apply filter
   switch (currentScheduleFilter) {
     case 'completed':
-      filteredSchedule = schedule.filter(g => g.score && g.opponentScore);
+      filteredSchedule = events.filter(e => e.event && e.event.result && e.event.result.hasScores);
       break;
     case 'upcoming':
-      filteredSchedule = schedule.filter(g => !g.score || !g.opponentScore);
+      filteredSchedule = events.filter(e => !e.event || !e.event.result || !e.event.result.hasScores);
       break;
     case 'conference':
-      filteredSchedule = schedule.filter(g => g.conference === true);
+      filteredSchedule = events.filter(e => e.event && e.event.conference === true);
       break;
   }
   
@@ -389,63 +562,81 @@ function renderSchedule() {
 }
 
 // Create schedule row
-function createScheduleRow(game) {
+function createScheduleRow(eventData) {
   const row = document.createElement('tr');
-  const isCompleted = game.score && game.opponentScore;
+  const event = eventData.event;
+  const isCompleted = event && event.result && event.result.hasScores;
   
   let result = '-';
   let score = '-';
   let resultClass = '';
   
   if (isCompleted) {
-    const pts = parseInt(game.score);
-    const oppPts = parseInt(game.opponentScore);
+    result = event.result.descriptionShortWithOT || event.result.description.charAt(0);
+    score = event.result.score || '-';
     
-    if (pts > oppPts) {
-      result = 'W';
+    if (event.result.description === 'Win') {
       resultClass = 'win';
-    } else if (pts < oppPts) {
-      result = 'L';
+    } else if (event.result.description === 'Loss') {
       resultClass = 'loss';
-    } else {
-      result = 'T';
-      resultClass = '';
     }
-    
-    score = `${pts}-${oppPts}`;
   }
   
-  const location = game.location === 'home' ? 'vs' : 
-                   game.location === 'away' ? '@' : 'N';
+  const location = event.home ? 'vs' : 
+                   (!event.home && !event.neutralSite) ? '@' : 'N';
   
-  const conferenceTag = game.conference ? '<span class="conference-tag">CONF</span>' : '';
+  // Build tags array
+  const tags = [];
+  
+  if (event.conference) {
+    tags.push('<span class="conference-tag">CONF</span>');
+  } else if (event.overall) {
+    // Non-conference game
+    tags.push('<span class="non-conference-tag">NON-CONF</span>');
+  }
+  
+  // Check for postseason types
+  if (event.postseason) {
+    if (event.national) {
+      tags.push('<span class="nationals-tag">NATIONALS</span>');
+    } else {
+      tags.push('<span class="playoffs-tag">PLAYOFFS</span>');
+    }
+  }
+  
+  const tagsHtml = tags.join(' ');
   
   row.innerHTML = `
-    <td>${game.date || 'TBD'}</td>
-    <td>${game.opponent || 'TBD'}</td>
+    <td>${eventData.eventDateFormatted || 'TBD'}</td>
+    <td>${event.opponent ? event.opponent.name : 'TBD'}</td>
     <td>${location}</td>
     <td class="${resultClass}">${result}</td>
     <td>${score}</td>
-    <td>${conferenceTag}</td>
+    <td>${tagsHtml}</td>
   `;
   
   if (!isCompleted) {
     row.classList.add('upcoming-game');
+  } else if (resultClass === 'win') {
+    row.classList.add('win-row');
+  } else if (resultClass === 'loss') {
+    row.classList.add('loss-row');
   }
   
   return row;
 }
 
 // Get record string from games
-function getRecordString(games) {
-  if (games.length === 0) return '0-0';
+function getRecordString(events) {
+  if (events.length === 0) return '0-0';
   
   let wins = 0, losses = 0;
-  games.forEach(game => {
-    const pts = parseInt(game.score) || 0;
-    const oppPts = parseInt(game.opponentScore) || 0;
-    if (pts > oppPts) wins++;
-    else if (pts < oppPts) losses++;
+  events.forEach(eventData => {
+    const event = eventData.event;
+    if (event && event.result && event.result.description) {
+      if (event.result.description === 'Win') wins++;
+      else if (event.result.description === 'Loss') losses++;
+    }
   });
   
   return `${wins}-${losses}`;
@@ -459,4 +650,146 @@ function showError(message) {
   setTimeout(() => {
     errorDiv.style.display = 'none';
   }, 5000);
+}
+
+// Sorting functionality for splits table
+let currentSplitSort = { column: null, direction: 'desc' };
+let splitsArray = []; // Store splits data for sorting
+
+function initializeSplitsTableSorting() {
+  const headers = document.querySelectorAll('#splitsTable thead th.sortable');
+  headers.forEach(header => {
+    header.addEventListener('click', () => {
+      const column = header.dataset.sort;
+      sortSplitsTable(column);
+    });
+  });
+}
+
+function sortSplitsTable(column) {
+  const tbody = document.getElementById('splitsBody');
+  
+  // Convert current rows to array
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  
+  // Determine sort direction
+  if (currentSplitSort.column === column) {
+    currentSplitSort.direction = currentSplitSort.direction === 'asc' ? 'desc' : 'asc';
+  } else {
+    currentSplitSort.column = column;
+    currentSplitSort.direction = 'desc'; // Default to descending
+  }
+  
+  // Map columns to cell indices
+  const columnIndex = {
+    'gp': 1,
+    'w': 2,
+    'l': 3,
+    'pct': 4,
+    'ppg': 5,
+    'oppg': 6,
+    'margin': 7,
+    'fgPct': 8,
+    'fg3Pct': 9,
+    'ftPct': 10,
+    'rpg': 11,
+    'apg': 12,
+    'topg': 13,
+    'spg': 14,
+    'bpg': 15
+  };
+  
+  const index = columnIndex[column];
+  if (index === undefined) return;
+  
+  // Sort rows
+  rows.sort((a, b) => {
+    const aText = a.cells[index].textContent.trim();
+    const bText = b.cells[index].textContent.trim();
+    
+    // Convert to numbers, handling percentage signs and dashes
+    const aVal = aText === '-' ? -Infinity : parseFloat(aText.replace(/[^0-9.-]/g, ''));
+    const bVal = bText === '-' ? -Infinity : parseFloat(bText.replace(/[^0-9.-]/g, ''));
+    
+    if (isNaN(aVal) && isNaN(bVal)) return 0;
+    if (isNaN(aVal)) return 1;
+    if (isNaN(bVal)) return -1;
+    
+    return currentSplitSort.direction === 'asc' ? aVal - bVal : bVal - aVal;
+  });
+  
+  // Update header classes
+  document.querySelectorAll('#splitsTable thead th').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+  });
+  const header = document.querySelector(`#splitsTable thead th[data-sort="${column}"]`);
+  if (header) {
+    header.classList.add(currentSplitSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+  }
+  
+  // Re-append sorted rows
+  tbody.innerHTML = '';
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+// Sorting functionality for roster table
+let currentRosterSort = { column: null, direction: 'desc' };
+
+function initializeRosterTableSorting() {
+  const headers = document.querySelectorAll('#rosterTable thead th.sortable');
+  headers.forEach(header => {
+    header.addEventListener('click', () => {
+      const column = header.dataset.sort;
+      sortRosterTable(column);
+    });
+  });
+}
+
+function sortRosterTable(column) {
+  // Determine sort direction
+  if (currentRosterSort.column === column) {
+    currentRosterSort.direction = currentRosterSort.direction === 'asc' ? 'desc' : 'asc';
+  } else {
+    currentRosterSort.column = column;
+    currentRosterSort.direction = 'desc'; // Default to descending
+  }
+  
+  // Map columns to player data fields
+  const columnMap = {
+    'gp': 'gp',
+    'ppg': 'ptspg',
+    'rpg': 'trebpg',
+    'apg': 'astpg',
+    'fgPct': 'fgpt',
+    'fg3Pct': 'fgpt3',
+    'ftPct': 'ftpt'
+  };
+  
+  const field = columnMap[column];
+  if (!field) return;
+  
+  // Sort roster data
+  rosterData.sort((a, b) => {
+    let aVal = parseFloat(a[field]) || 0;
+    let bVal = parseFloat(b[field]) || 0;
+    
+    return currentRosterSort.direction === 'asc' ? aVal - bVal : bVal - aVal;
+  });
+  
+  // Update header classes
+  document.querySelectorAll('#rosterTable thead th').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+  });
+  const header = document.querySelector(`#rosterTable thead th[data-sort="${column}"]`);
+  if (header) {
+    header.classList.add(currentRosterSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+  }
+  
+  // Re-render table
+  const tbody = document.getElementById('rosterBody');
+  tbody.innerHTML = '';
+  rosterData.forEach(player => {
+    const row = createRosterRow(player);
+    tbody.appendChild(row);
+  });
 }

@@ -6,23 +6,69 @@
  * 
  * Usage: 
  *   Extract single conference: node scripts/extractConferenceTeams.js <conference_url>
- *   Extract all conferences: node scripts/extractConferenceTeams.js
+ *   Extract all conferences for season: node scripts/extractConferenceTeams.js <season>
  * 
  * Example:
  *   node scripts/extractConferenceTeams.js "https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Appalachian/teams?jsRendering=true"
+ *   node scripts/extractConferenceTeams.js "2024-25"
  */
 
-// ALREADY EXTRACTED - These conferences are in config/teams.js
-const ALREADY_EXTRACTED = [
-  'https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Cascade/teams?jsRendering=true',
-  'https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/American_Midwest/teams?jsRendering=true',
-  'https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Appalachian/teams?jsRendering=true',
+// Conference names to extract (URL slugs from PrestoSports)
+// Note: Conference slugs differ between seasons
+const CONFERENCES_2025_26 = [
+  'Appalachian',
+  'American_Midwest', 
+  'Cal_Pac',
+  'Cascade',
+  'Chicagoland',
+  'Continental',
+  'Crossroads',
+  'Frontier',
+  'Great_Plains',
+  'GSAC',
+  'HBCU',
+  'Heart',
+  'KCAC',
+  'Mid-South',
+  'Red_River',
+  'RSC',
+  'SAC',
+  'Sooner',
+  'SSAC',
+  'Sun',
+  'WHAC'
 ];
 
-// TO EXTRACT - Add new conference URLs here
-const CONFERENCE_URLS = [
-  // Add more conference URLs below
+const CONFERENCES_2024_25 = [
+  'Appalachian',
+  'American_Midwest', 
+  'California_Pacific',
+  'Cascade',
+  'Chicagoland',
+  'Continental',
+  'Crossroads',
+  'Frontier',
+  'Great_Plains',
+  'Great_Southwest',
+  'HBCU_Conference',
+  'Heart_of_America',
+  'KCAC',
+  'Mid-South',
+  'Red_River',
+  'River_States',
+  'Sooner',
+  'Southern_States',
+  'The_Sun',
+  'Wolverine-Hoosier'
 ];
+
+// Generate conference URLs for a specific season
+function getConferenceUrls(season) {
+  const conferences = season === '2024-25' ? CONFERENCES_2024_25 : CONFERENCES_2025_26;
+  return conferences.map(conf => 
+    `https://naiastats.prestosports.com/sports/mbkb/${season}/conf/${conf}/teams?jsRendering=true`
+  );
+}
 
 async function getTeamPagesFromTeamsData(conferenceUrl) {
   try {
@@ -92,6 +138,10 @@ async function extractJsonUrlFromTeamPage(teamPageUrl) {
 
 async function extractTeamsFromConference(conferenceUrl) {
   try {
+    // Extract conference name from URL
+    const confMatch = conferenceUrl.match(/\/conf\/([^\/]+)\//);
+    const confName = confMatch ? confMatch[1] : 'Unknown';
+    
     console.log(`\n🔍 Fetching conference page: ${conferenceUrl}`);
     
     // Step 1: Get all team info from conference teamsData JSON
@@ -115,7 +165,10 @@ async function extractTeamsFromConference(conferenceUrl) {
       
       if (teamData) {
         console.log(`      ✅ Found JSON`);
-        results.push(teamData);
+        results.push({
+          ...teamData,
+          conference: confName
+        });
       } else {
         console.log(`      ❌ Failed to extract JSON URL`);
       }
@@ -132,49 +185,61 @@ async function extractTeamsFromConference(conferenceUrl) {
   }
 }
 
-async function extractAllConferences() {
-  console.log('🚀 Extracting all teams from conference pages...');
+async function extractAllConferences(season) {
+  console.log(`🚀 Extracting all teams for ${season} season...`);
   console.log('═══════════════════════════════════════════════════════════\n');
   
+  const conferenceUrls = getConferenceUrls(season);
   const allResults = [];
   
-  for (const conferenceUrl of CONFERENCE_URLS) {
+  for (const conferenceUrl of conferenceUrls) {
     const teams = await extractTeamsFromConference(conferenceUrl);
     allResults.push(...teams);
     
     // Small delay between conferences
-    if (CONFERENCE_URLS.indexOf(conferenceUrl) < CONFERENCE_URLS.length - 1) {
+    if (conferenceUrls.indexOf(conferenceUrl) < conferenceUrls.length - 1) {
       await new Promise(resolve => setTimeout(resolve, 500));
     }
   }
   
   console.log('\n═══════════════════════════════════════════════════════════');
-  console.log('📋 RESULTS - Add these to config/teams.js:');
+  console.log(`📋 RESULTS for ${season} - Add these to config/teams.js:`);
   console.log('═══════════════════════════════════════════════════════════\n');
   
   for (const team of allResults) {
     console.log(`  {`);
     console.log(`    name: '${team.name}',`);
     console.log(`    url: '${team.url}',`);
-    console.log(`    conference: 'CONFERENCE_NAME_HERE'`);
+    console.log(`    conference: '${team.conference}'`);
     console.log(`  },`);
   }
   
   console.log('\n═══════════════════════════════════════════════════════════');
-  console.log(`✅ Successfully extracted ${allResults.length} teams from ${CONFERENCE_URLS.length} conference(s)\n`);
+  console.log(`✅ Successfully extracted ${allResults.length} teams from ${conferenceUrls.length} conference(s) for ${season} season\n`);
 }
 
 // Main execution
 async function main() {
-  // Check if a single conference URL was provided as command line argument
-  const singleConferenceUrl = process.argv[2];
+  const arg = process.argv[2];
   
-  if (singleConferenceUrl) {
-    // Extract single conference mode
+  if (!arg) {
+    console.log('❌ No argument provided!');
+    console.log('\nUsage:');
+    console.log('  Season mode: node scripts/extractConferenceTeams.js <season>');
+    console.log('  Single conference: node scripts/extractConferenceTeams.js <conference_url>\n');
+    console.log('Examples:');
+    console.log('  node scripts/extractConferenceTeams.js "2024-25"');
+    console.log('  node scripts/extractConferenceTeams.js "https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/Appalachian/teams?jsRendering=true"\n');
+    return;
+  }
+  
+  // Check if argument is a season (e.g., "2024-25") or a full URL
+  if (arg.startsWith('http')) {
+    // Single conference URL mode
     console.log('🚀 Extracting teams from single conference...');
     console.log('═══════════════════════════════════════════════════════════\n');
     
-    const teams = await extractTeamsFromConference(singleConferenceUrl);
+    const teams = await extractTeamsFromConference(arg);
     
     console.log('\n═══════════════════════════════════════════════════════════');
     console.log('📋 RESULTS - Add these to config/teams.js:');
@@ -184,22 +249,15 @@ async function main() {
       console.log(`  {`);
       console.log(`    name: '${team.name}',`);
       console.log(`    url: '${team.url}',`);
-      console.log(`    conference: 'CONFERENCE_NAME_HERE'`);
+      console.log(`    conference: '${team.conference || 'CONFERENCE_NAME_HERE'}'`);
       console.log(`  },`);
     }
     
     console.log('\n═══════════════════════════════════════════════════════════');
     console.log(`✅ Successfully extracted ${teams.length} team(s)\n`);
-  } else if (CONFERENCE_URLS.length > 0) {
-    // Extract all conferences in CONFERENCE_URLS array
-    await extractAllConferences();
   } else {
-    console.log('❌ No conference URLs provided!');
-    console.log('\nUsage:');
-    console.log('  Single conference: node scripts/extractConferenceTeams.js <conference_url>');
-    console.log('  Multiple conferences: Add URLs to CONFERENCE_URLS array in the script\n');
-    console.log('Example:');
-    console.log('  node scripts/extractConferenceTeams.js "https://naiastats.prestosports.com/sports/mbkb/2025-26/conf/SomeConference/teams?jsRendering=true"\n');
+    // Season mode - extract all conferences for that season
+    await extractAllConferences(arg);
   }
 }
 

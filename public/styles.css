@@ -162,7 +162,7 @@ h1 {
   color: #475569;
 }
 
-#seasonFilter, #splitSelector, #conferenceSimpleFilter, #conferenceCustomFilter, #locationFilter, #competitionFilter, #winLossFilter, #monthFilter, #statTypeFilter, #conferenceFilter, #teamFilter {
+#seasonFilter, #splitSelector, #conferenceSimpleFilter, #conferenceCustomFilter, #locationFilter, #competitionFilter, #winLossFilter, #monthFilter, #statTypeFilter, #conferenceFilter, #teamFilter, #seasonSelect, #conferenceSelect, #teamSelect {
   background: white;
   border: 1px solid #cbd5e0;
   color: #4a5568;
@@ -183,12 +183,12 @@ h1 {
   min-width: 140px;
 }
 
-#seasonFilter:hover, #splitSelector:hover, #conferenceSimpleFilter:hover, #conferenceCustomFilter:hover, #locationFilter:hover, #competitionFilter:hover, #winLossFilter:hover, #monthFilter:hover, #statTypeFilter:hover, #conferenceFilter:hover, #teamFilter:hover {
+#seasonFilter:hover, #splitSelector:hover, #conferenceSimpleFilter:hover, #conferenceCustomFilter:hover, #locationFilter:hover, #competitionFilter:hover, #winLossFilter:hover, #monthFilter:hover, #statTypeFilter:hover, #conferenceFilter:hover, #teamFilter:hover, #seasonSelect:hover, #conferenceSelect:hover, #teamSelect:hover {
   background-color: #f8fafc;
   border-color: #94a3b8;
 }
 
-#seasonFilter:focus, #splitSelector:focus, #conferenceSimpleFilter:focus, #conferenceCustomFilter:focus, #locationFilter:focus, #competitionFilter:focus, #winLossFilter:focus, #monthFilter:focus, #statTypeFilter:focus, #conferenceFilter:focus, #teamFilter:focus {
+#seasonFilter:focus, #splitSelector:focus, #conferenceSimpleFilter:focus, #conferenceCustomFilter:focus, #locationFilter:focus, #competitionFilter:focus, #winLossFilter:focus, #monthFilter:focus, #statTypeFilter:focus, #conferenceFilter:focus, #teamFilter:focus, #seasonSelect:focus, #conferenceSelect:focus, #teamSelect:focus {
   border-color: #00316E;
   box-shadow: 0 0 0 3px rgba(0, 49, 110, 0.1);
 }
@@ -712,14 +712,16 @@ th:not(:first-child) {
 }
 
 #splitsSection,
-#scheduleSection {
+#scheduleSection,
+#rosterSection {
   max-width: 1400px;
   margin: 0 auto;
   padding: 32px 24px;
 }
 
 #splitsSection h3,
-#scheduleSection h3 {
+#scheduleSection h3,
+#rosterSection h3 {
   font-size: 20px;
   font-weight: 600;
   color: #1a202c;
@@ -813,6 +815,23 @@ th:not(:first-child) {
   font-style: italic;
 }
 
+/* Schedule row highlighting for wins/losses */
+tr.win-row {
+  background-color: #f0fdf4 !important;
+}
+
+tr.win-row:hover {
+  background-color: #dcfce7 !important;
+}
+
+tr.loss-row {
+  background-color: #fef2f2 !important;
+}
+
+tr.loss-row:hover {
+  background-color: #fee2e2 !important;
+}
+
 .conference-tag {
   display: inline-block;
   padding: 2px 8px;
@@ -822,6 +841,43 @@ th:not(:first-child) {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.non-conference-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #e5e7eb;
+  color: #4b5563;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.playoffs-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.nationals-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #fce7f3;
+  color: #831843;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-right: 4px;
 }
 
 .loading {

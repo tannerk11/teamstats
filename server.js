@@ -144,8 +144,34 @@ app.get('/api/stats', async (req, res) => {
 app.get('/api/seasons', (req, res) => {
   res.json({
     seasons: SEASONS,
-    defaultSeason: DEFAULT_SEASON
+    defaultSeason: DEFAULT_SEASON,
+    teamsBySeason: TEAMS_BY_SEASON
   });
+});
+
+// API endpoint to get individual team data
+app.get('/api/team', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url) {
+      return res.status(400).json({ error: 'Team URL is required' });
+    }
+    
+    console.log(`🏀 Fetching team data from: ${url}`);
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch team data: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    res.json(data);
+    
+  } catch (error) {
+    console.error('Error fetching team data:', error);
+    res.status(500).json({ error: 'Failed to fetch team data' });
+  }
 });
 
 app.post('/api/refresh', async (req, res) => {
