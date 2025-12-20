@@ -684,3 +684,178 @@ td:not(:first-child) {
 th:not(:first-child) {
   text-align: left;
 }
+
+/* Scout Page Styles */
+.scout-selection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.team-info {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.team-info h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.team-record {
+  display: flex;
+  gap: 20px;
+  font-size: 16px;
+  color: #4a5568;
+}
+
+.team-record span {
+  font-weight: 500;
+}
+
+#splitsSection,
+#scheduleSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+#splitsSection h3,
+#scheduleSection h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 20px;
+}
+
+.split-name {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.schedule-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  color: #4a5568;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: #cbd5e0;
+  background: #f7fafc;
+}
+
+.filter-btn.active {
+  border-color: #00316E;
+  background: #00316E;
+  color: white;
+}
+
+.schedule-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  background: #f7fafc;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.summary-label {
+  display: block;
+  font-size: 13px;
+  color: #718096;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.summary-value {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.win {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.loss {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.positive {
+  color: #22c55e;
+}
+
+.negative {
+  color: #ef4444;
+}
+
+.upcoming-game {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.conference-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.loading {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  text-align: center;
+  font-size: 18px;
+  color: #718096;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .scout-selection {
+    grid-template-columns: 1fr;
+  }
+  
+  .schedule-summary {
+    grid-template-columns: 1fr;
+  }
+  
+  .team-record {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

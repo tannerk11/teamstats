@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scout - Conference Stats</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>NAIA Stat Machine</h1>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">Teams</a>
+        <a href="players.html" class="nav-link">Players</a>
+        <a href="scout.html" class="nav-link active">Scout</a>
+      </nav>
+      <div class="header-info">
+        <span id="lastUpdated">Select a team to scout</span>
+      </div>
+    </header>
+
+    <div id="error" class="error" style="display: none;"></div>
+
+    <!-- Team Selection Section -->
+    <div class="scout-selection">
+      <div class="filter-group">
+        <label for="seasonSelect">Season:</label>
+        <select id="seasonSelect">
+          <option value="">Select Season</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="conferenceSelect">Conference:</label>
+        <select id="conferenceSelect">
+          <option value="">Select Conference</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="teamSelect">Team:</label>
+        <select id="teamSelect" disabled>
+          <option value="">Select Team</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="loading" style="display: none;">
+      <p>Loading team data...</p>
+    </div>
+
+    <!-- Team Info Section -->
+    <div id="teamInfo" class="team-info" style="display: none;">
+      <h2 id="teamName"></h2>
+      <div class="team-record">
+        <span id="teamRecord"></span>
+        <span id="teamConference"></span>
+      </div>
+    </div>
+
+    <!-- Splits Table Section -->
+    <div id="splitsSection" style="display: none;">
+      <h3>Performance Splits</h3>
+      <div class="table-container">
+        <table id="splitsTable">
+          <thead>
+            <tr>
+              <th class="sticky-col">Split</th>
+              <th class="sortable" data-sort="gp">GP</th>
+              <th class="sortable" data-sort="w">W</th>
+              <th class="sortable" data-sort="l">L</th>
+              <th class="sortable" data-sort="pct">PCT</th>
+              <th class="sortable" data-sort="ppg">PPG</th>
+              <th class="sortable" data-sort="oppg">OPPG</th>
+              <th class="sortable" data-sort="margin">Margin</th>
+              <th class="sortable" data-sort="fgPct">FG%</th>
+              <th class="sortable" data-sort="fg3Pct">3P%</th>
+              <th class="sortable" data-sort="ftPct">FT%</th>
+              <th class="sortable" data-sort="rpg">RPG</th>
+              <th class="sortable" data-sort="apg">APG</th>
+              <th class="sortable" data-sort="topg">TOPG</th>
+              <th class="sortable" data-sort="spg">SPG</th>
+              <th class="sortable" data-sort="bpg">BPG</th>
+            </tr>
+          </thead>
+          <tbody id="splitsBody">
+            <!-- Splits rows will be populated here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Schedule Section -->
+    <div id="scheduleSection" style="display: none;">
+      <h3>Schedule & Results</h3>
+      
+      <div class="schedule-filters">
+        <button class="filter-btn active" data-filter="all">All Games</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+        <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+        <button class="filter-btn" data-filter="conference">Conference Only</button>
+      </div>
+
+      <div class="schedule-summary">
+        <div class="summary-card">
+          <span class="summary-label">Overall Record:</span>
+          <span id="overallRecord" class="summary-value">-</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Conference Record:</span>
+          <span id="conferenceRecord" class="summary-value">-</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Home Record:</span>
+          <span id="homeRecord" class="summary-value">-</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Away Record:</span>
+          <span id="awayRecord" class="summary-value">-</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Last 10:</span>
+          <span id="last10Record" class="summary-value">-</span>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table id="scheduleTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Opponent</th>
+              <th>Location</th>
+              <th>Result</th>
+              <th>Score</th>
+              <th>Conference</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody">
+            <!-- Schedule rows will be populated here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="scout.js"></script>
+</body>
+</html>
