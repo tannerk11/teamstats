@@ -23,7 +23,7 @@ function initializeSelectors() {
   SEASONS.forEach(season => {
     const option = document.createElement('option');
     option.value = season.id;
-    option.textContent = season.name;
+    option.textContent = season.label;
     seasonSelect.appendChild(option);
   });
 }

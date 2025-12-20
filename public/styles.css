@@ -686,17 +686,6 @@ th:not(:first-child) {
 }
 
 /* Scout Page Styles */
-.scout-selection {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 32px 24px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  background: white;
-  border-bottom: 1px solid #e2e8f0;
-}
-
 .team-info {
   max-width: 1400px;
   margin: 0 auto;
@@ -846,10 +835,6 @@ th:not(:first-child) {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .scout-selection {
-    grid-template-columns: 1fr;
-  }
-  
   .schedule-summary {
     grid-template-columns: 1fr;
   }
