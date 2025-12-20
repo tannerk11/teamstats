@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player Stats - Conference Stats</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>NAIA Stat Machine</h1>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">Teams</a>
+        <a href="players.html" class="nav-link active">Players</a>
+      </nav>
+      <div class="header-info">
+        <span id="lastUpdated">Loading...</span>
+        <button id="refreshBtn">Refresh Data</button>
+      </div>
+    </header>
+
+    <div id="error" class="error" style="display: none;"></div>
+
+    <div class="filter-controls">
+      <div class="filter-section active">
+        <div class="filter-group">
+          <label for="seasonFilter">Season:</label>
+          <select id="seasonFilter">
+            <!-- Options populated from seasons.js -->
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="statTypeFilter">Stat Type:</label>
+          <select id="statTypeFilter">
+            <option value="stats">Overall</option>
+            <option value="statsConference">Conference</option>
+            <option value="statsNational">National</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="conferenceFilter">Conference:</label>
+          <select id="conferenceFilter">
+            <option value="all">All Conferences</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="teamFilter">Team:</label>
+          <select id="teamFilter">
+            <option value="all">All Teams</option>
+          </select>
+        </div>
+
+        <button id="applyFilters" class="apply-filters-btn">Apply Filters</button>
+        <button id="resetFilters" class="reset-filters-btn">Reset</button>
+      </div>
+    </div>
+
+    <div class="table-outside">
+      <div id="loading" class="loading">Loading player data...</div>
+      <div id="playerCount" class="player-count"></div>
+      
+      <div class="table-container">
+        <table id="playersTable">
+          <thead>
+            <tr id="tableHeader">
+              <!-- Headers will be generated dynamically -->
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Data will be populated here -->
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination Controls -->
+      <div id="paginationControls" class="pagination-controls" style="display: none;">
+        <button id="prevPage" class="pagination-btn">← Previous</button>
+        <span id="pageInfo" class="page-info">1 / 1</span>
+        <button id="nextPage" class="pagination-btn">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="players.js"></script>
+</body>
+</html>

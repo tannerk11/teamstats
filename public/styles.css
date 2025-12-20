@@ -26,7 +26,6 @@ header > h1,
 header > .header-info {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 30px;
 }
 
 /* Create a flex wrapper effect for header children */
@@ -47,6 +46,37 @@ h1 {
   font-size: 28px;
   font-weight: 600;
   width: 100%;
+}
+
+/* Navigation styles */
+.main-nav {
+  display: flex;
+  gap: 0;
+  margin-top: 15px;
+  grid-column: 1 / -1;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-link {
+  padding: 10px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  position: relative;
+  bottom: -2px;
+}
+
+.nav-link:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+  color: white;
+  border-bottom-color: white;
 }
 
 .header-info {
@@ -132,7 +162,7 @@ h1 {
   color: #475569;
 }
 
-#splitSelector, #conferenceSimpleFilter, #conferenceCustomFilter, #locationFilter, #competitionFilter, #winLossFilter, #monthFilter {
+#seasonFilter, #splitSelector, #conferenceSimpleFilter, #conferenceCustomFilter, #locationFilter, #competitionFilter, #winLossFilter, #monthFilter, #statTypeFilter, #conferenceFilter, #teamFilter {
   background: white;
   border: 1px solid #cbd5e0;
   color: #4a5568;
@@ -153,12 +183,12 @@ h1 {
   min-width: 140px;
 }
 
-#splitSelector:hover, #conferenceSimpleFilter:hover, #conferenceCustomFilter:hover, #locationFilter:hover, #competitionFilter:hover, #winLossFilter:hover, #monthFilter:hover {
+#seasonFilter:hover, #splitSelector:hover, #conferenceSimpleFilter:hover, #conferenceCustomFilter:hover, #locationFilter:hover, #competitionFilter:hover, #winLossFilter:hover, #monthFilter:hover, #statTypeFilter:hover, #conferenceFilter:hover, #teamFilter:hover {
   background-color: #f8fafc;
   border-color: #94a3b8;
 }
 
-#splitSelector:focus, #conferenceSimpleFilter:focus, #conferenceCustomFilter:focus, #locationFilter:focus, #competitionFilter:focus, #winLossFilter:focus, #monthFilter:focus {
+#seasonFilter:focus, #splitSelector:focus, #conferenceSimpleFilter:focus, #conferenceCustomFilter:focus, #locationFilter:focus, #competitionFilter:focus, #winLossFilter:focus, #monthFilter:focus, #statTypeFilter:focus, #conferenceFilter:focus, #teamFilter:focus {
   border-color: #00316E;
   box-shadow: 0 0 0 3px rgba(0, 49, 110, 0.1);
 }
@@ -245,19 +275,11 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  margin: 0 auto;
 }
 
 .spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(0, 49, 110, 0.1);
-  border-top-color: #00316E;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
+  display: none;
 }
 
 .error {
@@ -370,6 +392,84 @@ h1 {
   padding: 15px 30px 30px;
 }
 
+.player-count {
+  padding: 10px 0;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+  padding: 15px 0;
+  margin-top: 10px;
+}
+
+.pagination-btn {
+  padding: 8px 16px;
+  background: #00316E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #002656;
+}
+
+.pagination-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.page-info {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Players page - Only player name should be sticky (first column) */
+.player-name {
+  font-weight: 600;
+  color: #00316E;
+  text-align: left !important;
+  position: sticky;
+  left: 0;
+  background: white;
+  z-index: 10;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+}
+
+/* Players page - Player name header (sticky) */
+th.player-name-header {
+  text-align: left !important;
+  position: sticky;
+  left: 0;
+  z-index: 101;
+  background: #f7fafc;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+}
+
+thead th.player-name-header {
+  z-index: 102;
+}
+
+/* Players page - Team cell (not sticky, just regular styling) */
+.player-team-cell {
+  color: #64748b;
+  font-weight: 500;
+}
+
 table {
   width: 100%;
   border-collapse: separate;
@@ -386,7 +486,7 @@ thead {
 
 th {
   padding: 12px 8px;
-  text-align: center;
+  text-align: start;
   font-weight: 600;
   color: #2d3748;
   background: #f7fafc;
@@ -395,6 +495,64 @@ th {
   user-select: none;
   white-space: nowrap;
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Sticky columns for Teams page - Rank column */
+.rank-cell {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: white;
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
+}
+
+/* Sticky header for rank column */
+th[data-column="netRatingRank"] {
+  text-align: center;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 101;
+  background: #f7fafc;
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
+}
+
+thead th[data-column="netRatingRank"] {
+  z-index: 102;
+}
+
+/* Teams page - Team name should also be sticky (second column) */
+.team-name {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 60px; /* Width of rank column */
+  z-index: 10;
+  background: white;
+  text-align: left !important;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+th[data-column="teamName"] {
+  text-align: left;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 60px;
+  z-index: 101;
+  background: #f7fafc;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+thead th[data-column="teamName"] {
+  z-index: 102;
 }
 
 th:hover {
@@ -429,7 +587,19 @@ tbody tr:hover {
   background: #f7fafc;
 }
 
+tbody tr:hover .player-name,
+tbody tr:hover .rank-cell,
+tbody tr:hover .team-name {
+  background: #f7fafc;
+}
+
 tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+tbody tr:nth-child(even) .player-name,
+tbody tr:nth-child(even) .rank-cell,
+tbody tr:nth-child(even) .team-name {
   background: #fafafa;
 }
 
@@ -437,16 +607,13 @@ tbody tr:nth-child(even):hover {
   background: #f0f0f0;
 }
 
-.team-name {
-  font-weight: 600;
-  color: #2d3748;
-  min-width: 150px;
-  position: sticky;
-  left: 60px;
-  background: white;
-  z-index: 5;
-  text-align: left !important;
+tbody tr:nth-child(even):hover .player-name,
+tbody tr:nth-child(even):hover .rank-cell,
+tbody tr:nth-child(even):hover .team-name {
+  background: #f0f0f0;
 }
+
+/* Note: .player-team-cell doesn't need special hover handling as it's not sticky */
 
 /* Stat ranking display */
 .stat-rank {
@@ -480,32 +647,21 @@ tbody tr:hover .rank-cell {
   background: #dae9ff;
 }
 
-/* Sticky header for rank column (first column) */
-th:first-child {
+/* Sticky header for rank column (first column) - Teams page only */
+th[data-column]:first-child {
   position: sticky;
   left: 0;
   background: #f7fafc;
   z-index: 15;
 }
 
-/* Sticky header for team name column (second column) */
-th:nth-child(2) {
+/* Sticky header for team name column (second column) - Teams page only */
+th[data-column]:nth-child(2) {
   position: sticky;
   left: 60px;
   background: #f7fafc;
   z-index: 15;
   text-align: left !important;
-}
-
-/* Add shadow to sticky column for visual separation */
-.team-name::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 1px;
-  background: #e2e8f0;
 }
 
 tbody tr:nth-child(even) .team-name {
@@ -522,9 +678,9 @@ tbody tr:nth-child(even):hover .team-name {
 
 /* Number cells right-aligned */
 td:not(:first-child) {
-  text-align: right;
+  text-align: left;
 }
 
 th:not(:first-child) {
-  text-align: right;
+  text-align: left;
 }

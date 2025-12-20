@@ -10,7 +10,11 @@
 <body>
   <div class="container">
     <header>
-      <h1>Conference Statistics</h1>
+      <h1>NAIA Stat Machine</h1>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link active">Teams</a>
+        <a href="players.html" class="nav-link">Players</a>
+      </nav>
       <div class="header-info">
         <span id="lastUpdated">Loading...</span>
         <button id="refreshBtn">Refresh Data</button>
@@ -21,6 +25,13 @@
 
     <div class="filter-controls">
       <div id="customFilters" class="filter-section active">
+        <div class="filter-group">
+          <label for="seasonFilter">Season:</label>
+          <select id="seasonFilter">
+            <!-- Options populated from seasons.js -->
+          </select>
+        </div>
+
         <div class="filter-group">
           <label for="conferenceCustomFilter">Conference:</label>
           <select id="conferenceCustomFilter">

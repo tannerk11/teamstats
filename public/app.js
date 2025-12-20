@@ -3,6 +3,10 @@ const API_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:3000/api/stats'
   : '/api/stats'; // Use relative URL in production
 
+const SEASONS_API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api/seasons'
+  : '/api/seasons';
+
 let statsData = [];
 let allStatsData = []; // Store unfiltered data
 let columnLabels = {};
@@ -13,6 +17,42 @@ let scatterChart = null; // Store scatter chart instance
 let reboundChart = null; // Store rebound scatter chart instance
 let currentChartStat = 'netRating'; // Current stat to display
 let currentConference = ''; // Current conference filter
+let currentSeason = ''; // Current season filter
+
+// Load available seasons and populate dropdown
+async function loadSeasons() {
+  try {
+    const response = await fetch(SEASONS_API_URL);
+    const result = await response.json();
+    
+    const seasonFilter = document.getElementById('seasonFilter');
+    seasonFilter.innerHTML = '';
+    
+    result.seasons.forEach(season => {
+      const option = document.createElement('option');
+      option.value = season.id;
+      option.textContent = season.label;
+      if (season.isCurrent) {
+        option.selected = true;
+        currentSeason = season.id;
+      }
+      seasonFilter.appendChild(option);
+    });
+    
+    // Add change listener
+    seasonFilter.addEventListener('change', (e) => {
+      currentSeason = e.target.value;
+      console.log(`🔄 Season changed to: ${currentSeason}`);
+      applyFilters(); // Reload data for new season
+    });
+    
+    console.log(`✅ Loaded ${result.seasons.length} seasons, current: ${currentSeason}`);
+  } catch (error) {
+    console.error('Error loading seasons:', error);
+    // Set default season if loading fails
+    currentSeason = '2025-26';
+  }
+}
 
 // Fetch data from API
 async function fetchStats(customFilters = null) {
@@ -32,6 +72,7 @@ async function fetchStats(customFilters = null) {
     if (customFilters) {
       // Build query string with custom filters
       const params = new URLSearchParams();
+      params.append('season', currentSeason); // Always include season
       if (customFilters.location) params.append('location', customFilters.location);
       if (customFilters.competition) params.append('competition', customFilters.competition);
       if (customFilters.winLoss) params.append('winLoss', customFilters.winLoss);
@@ -42,7 +83,7 @@ async function fetchStats(customFilters = null) {
       console.log('Fetching with custom filters:', url, customFilters);
     } else {
       // Default to overall stats with no filters
-      url += '?split=overall';
+      url += `?season=${currentSeason}&split=overall`;
       if (currentConference) url += `&conference=${currentConference}`;
       url += `&_t=${Date.now()}`; // Cache-busting parameter
       console.log('Fetching overall stats:', url);
@@ -910,5 +951,8 @@ document.getElementById('chartStatSelector').addEventListener('change', (e) => {
   renderStatsChart(currentChartStat);
 });
 
-fetchStats();
-scheduleNextRefresh();
+// Initialize: Load seasons first, then fetch stats
+loadSeasons().then(() => {
+  fetchStats();
+  scheduleNextRefresh();
+});
