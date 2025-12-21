@@ -153,6 +153,17 @@ function renderTable() {
   
   let rankedData = statsData;
   
+  // Debug: Check if DSOS/OSOS exist in first team
+  if (statsData.length > 0) {
+    console.log('First team data sample:', {
+      teamName: statsData[0].teamName,
+      dsos: statsData[0].dsos,
+      osos: statsData[0].osos,
+      ortg: statsData[0].offensiveRating,
+      drtg: statsData[0].defensiveRating
+    });
+  }
+  
   // Get all unique columns from the data
   const allColumns = new Set();
   rankedData.forEach(team => {
@@ -165,9 +176,11 @@ function renderTable() {
   const columnsToShow = [
     'netRatingRank',
     'teamName',
+    'conference',
     'gp', 'wins', 'losses', 'winPct',
-    'netRating', 'offensiveRating', 'defensiveRating',
-    'ptspg', 'ptspgopp', 'scmg',
+    'netRating', 'offensiveRating', 'defensiveRating', 'nsos',
+    'adjORTG', 'adjDRTG', 'adjNTRG',
+    'ptspg', 'ptspgopp',
     'possessionsPerGame', 'oppPossessionsPerGame',
     'fgPct', 'fg3Pct', 'ftPct', 'efgPct', 'ftRate', 'threePtRate', 'shotVolume',
     'fgPctOpp', 'fg3PctOpp', 'ftPctOpp', 'efgPctOpp', 'ftRateOpp', 'threePtRateOpp', 'shotVolumeOpp',
@@ -184,6 +197,9 @@ function renderTable() {
   if (columnsToShow) {
     // Use the exact order specified in columnsToShow
     columns = columnsToShow.filter(col => allColumns.has(col));
+    console.log('Columns to show:', columnsToShow);
+    console.log('Columns found in data:', columns);
+    console.log('Missing columns:', columnsToShow.filter(col => !allColumns.has(col)));
   } else {
     // Show all columns, sorted alphabetically (teamName first)
     columns = Array.from(allColumns).sort((a, b) => {
@@ -228,8 +244,8 @@ function renderTable() {
 // Calculate rankings for stats that should display rankings
 function calculateRankings() {
   // Only rank ORTG (higher is better) and DRTG (lower is better)
-  const rankedStats = ['offensiveRating'];
-  const rankedStatsLowerBetter = ['defensiveRating'];
+  const rankedStats = ['offensiveRating', 'adjORTG', 'adjNTRG', 'nsos'];
+  const rankedStatsLowerBetter = ['defensiveRating', 'adjDRTG'];
   
   const rankings = {};
   
@@ -261,7 +277,7 @@ function renderTableBody(columns) {
   const tbody = document.getElementById('tableBody');
   const rankings = calculateRankings();
   
-  tbody.innerHTML = statsData.map((team, teamIndex) => {
+  const teamRows = statsData.map((team, teamIndex) => {
     const cells = columns.map(col => {
       const value = team[col];
       const formatted = formatValue(value, col);
@@ -279,6 +295,52 @@ function renderTableBody(columns) {
     }).join('');
     return `<tr>${cells}</tr>`;
   }).join('');
+  
+  // Calculate averages for numeric columns
+  const averageRow = columns.map((col, colIndex) => {
+    let cellClass = 'average-cell';
+    if (col === 'teamName') cellClass += ' team-name';
+    else if (col === 'netRatingRank') cellClass += ' rank-cell';
+    
+    if (col === 'teamName') {
+      return `<td class="${cellClass}"><strong>Average</strong></td>`;
+    } else if (col === 'netRatingRank') {
+      // Don't show rank for average row
+      return `<td class="${cellClass}">-</td>`;
+    } else if (col === 'record') {
+      // Calculate average wins and losses
+      const totalWins = statsData.reduce((sum, team) => sum + (team.wins || 0), 0);
+      const totalLosses = statsData.reduce((sum, team) => sum + (team.losses || 0), 0);
+      const avgWins = (totalWins / statsData.length).toFixed(1);
+      const avgLosses = (totalLosses / statsData.length).toFixed(1);
+      return `<td class="${cellClass}">${avgWins}-${avgLosses}</td>`;
+    } else if (col === 'gp' || col === 'wins' || col === 'losses') {
+      // Calculate average for GP, wins, losses with 1 decimal
+      const numericValues = statsData
+        .map(team => team[col])
+        .filter(val => typeof val === 'number' && !isNaN(val));
+      
+      if (numericValues.length > 0) {
+        const avg = numericValues.reduce((sum, val) => sum + val, 0) / numericValues.length;
+        return `<td class="${cellClass}">${avg.toFixed(1)}</td>`;
+      }
+      return `<td class="${cellClass}">-</td>`;
+    } else {
+      // Calculate average for numeric columns (without rankings)
+      const numericValues = statsData
+        .map(team => team[col])
+        .filter(val => typeof val === 'number' && !isNaN(val));
+      
+      if (numericValues.length > 0) {
+        const avg = numericValues.reduce((sum, val) => sum + val, 0) / numericValues.length;
+        const formatted = formatValue(avg, col);
+        return `<td class="${cellClass}">${formatted}</td>`;
+      }
+      return `<td class="${cellClass}">-</td>`;
+    }
+  }).join('');
+  
+  tbody.innerHTML = teamRows + `<tr class="average-row">${averageRow}</tr>`;
 }
 
 // Sort table by column
@@ -353,8 +415,68 @@ function getColumnLabel(columnKey) {
 function formatValue(value, columnKey) {
   if (value == null) return '-';
   
-  // Return certain fields as-is (like win-loss record, rank, games played)
-  if (columnKey === 'record' || columnKey === 'wins' || columnKey === 'losses' || columnKey === 'gp' || columnKey === 'rank' || columnKey === 'netRatingRank') {
+  // Abbreviate conference names
+  if (columnKey === 'conference') {
+    const conferenceAbbreviations = {
+      'American Midwest': 'AMC',
+      'American Rivers': 'ARC',
+      'Atlantic East': 'AEC',
+      'Big South': 'BSC',
+      'California Pacific': 'CalPac',
+      'Cascade': 'CCC',
+      'Central Atlantic Collegiate': 'CACC',
+      'Chicagoland Collegiate': 'CCAC',
+      'Colonial States': 'CSAC',
+      'Commonwealth Coast': 'CCC',
+      'Continental Athletic': 'CAC',
+      'Crossroads League': 'CL',
+      'East Coast': 'ECC',
+      'Empire 8': 'E8',
+      'Great Lakes Intercollegiate': 'GLIAC',
+      'Great Lakes Valley': 'GLVC',
+      'Great Midwest': 'GMAC',
+      'Great Northeast': 'GNAC',
+      'Gulf South': 'GSC',
+      'Heartland': 'HCAC',
+      'Independent': 'IND',
+      'Lone Star': 'LSC',
+      'Massachusetts State Collegiate': 'MASCAC',
+      'Michigan Intercollegiate': 'MIAA',
+      'Middle Atlantic': 'MAC',
+      'Midwest': 'MWC',
+      'Minnesota Intercollegiate': 'MIAC',
+      'Mountain East': 'MEC',
+      'New England Collegiate': 'NECC',
+      'New England Women\'s and Men\'s': 'NEWMAC',
+      'New Jersey Athletic': 'NJAC',
+      'North Atlantic': 'NAC',
+      'North Coast Athletic': 'NCAC',
+      'North Star': 'NSAA',
+      'Northeast': 'NE-10',
+      'Northern Athletics Collegiate': 'NACA',
+      'Northern Sun Intercollegiate': 'NSIC',
+      'Northwest': 'NWC',
+      'Ohio Athletic': 'OAC',
+      'Old Dominion': 'ODAC',
+      'Pacific West': 'PacWest',
+      'Peach Belt': 'PBC',
+      'Pennsylvania State Athletic': 'PSAC',
+      'Presidents\' Athletic': 'PAC',
+      'Rocky Mountain': 'RMAC',
+      'South Atlantic': 'SAC',
+      'Southern Athletic': 'SAA',
+      'Southern California Intercollegiate': 'SCIAC',
+      'Southern Collegiate': 'SCAC',
+      'Sunshine State': 'SSC',
+      'Upper Midwest': 'UMAC',
+      'USA South': 'USAS',
+      'Wisconsin Intercollegiate': 'WIAC'
+    };
+    return conferenceAbbreviations[value] || value;
+  }
+  
+  // Return certain fields as-is (like win-loss record, rank, games played, team name)
+  if (columnKey === 'record' || columnKey === 'wins' || columnKey === 'losses' || columnKey === 'gp' || columnKey === 'rank' || columnKey === 'netRatingRank' || columnKey === 'teamName') {
     return value;
   }
   
@@ -384,7 +506,13 @@ function formatValue(value, columnKey) {
   const isOneDecimal = columnKey && (
     columnKey.includes('pg') || 
     columnKey.includes('pm') ||
-    columnKey === 'scmg'
+    columnKey === 'scmg' ||
+    columnKey === 'dsos' ||
+    columnKey === 'osos' ||
+    columnKey === 'nsos' ||
+    columnKey === 'adjORTG' ||
+    columnKey === 'adjDRTG' ||
+    columnKey === 'adjNTRG'
   );
   
   // If it's already a number, format it
@@ -892,6 +1020,46 @@ function applyConferenceFilter() {
   } else {
     statsData = filteredData;
   }
+  
+  // Calculate adjusted ratings
+  calculateAdjustedRatings();
+}
+
+function calculateAdjustedRatings() {
+  // Calculate average DRTG and average ORTG across all teams
+  const validTeams = statsData.filter(team => 
+    team.offensiveRating != null && 
+    team.defensiveRating != null && 
+    team.dsos != null && 
+    team.osos != null &&
+    team.dsos > 0 &&
+    team.osos > 0
+  );
+  
+  if (validTeams.length === 0) return;
+  
+  const avgDRTG = validTeams.reduce((sum, team) => sum + team.defensiveRating, 0) / validTeams.length;
+  const avgORTG = validTeams.reduce((sum, team) => sum + team.offensiveRating, 0) / validTeams.length;
+  
+  // Calculate adjusted ratings for each team
+  statsData.forEach(team => {
+    if (team.offensiveRating != null && team.defensiveRating != null && 
+        team.dsos != null && team.osos != null &&
+        team.dsos > 0 && team.osos > 0) {
+      // AdjORTG = ORTG x (Average DRTG / DSOS)
+      team.adjORTG = team.offensiveRating * (avgDRTG / team.dsos);
+      
+      // AdjDRTG = DRTG x (Average ORTG / OSOS)
+      team.adjDRTG = team.defensiveRating * (avgORTG / team.osos);
+      
+      // AdjNTRG = AdjORTG - AdjDRTG
+      team.adjNTRG = team.adjORTG - team.adjDRTG;
+    } else {
+      team.adjORTG = null;
+      team.adjDRTG = null;
+      team.adjNTRG = null;
+    }
+  });
 }
 
 // Conference filter change handler

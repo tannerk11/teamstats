@@ -262,8 +262,9 @@ function calculateSplitStats(events) {
     return {
       gp: 0, wins: 0, losses: 0, winPct: '.000',
       ppg: 0, oppg: 0, margin: 0,
-      fgPct: 0, fg3Pct: 0, ftPct: 0,
-      rpg: 0, apg: 0, topg: 0, spg: 0, bpg: 0
+      fgPct: 0, fg3Pct: 0, ftPct: 0, efgPct: '-', ftRate: '-', threePtRate: '-',
+      rpg: 0, orpg: 0, drpg: 0, orPct: '-', drPct: '-',
+      apg: 0, topg: 0, toPct: '-', spg: 0, bpg: 0
     };
   }
   
@@ -280,8 +281,9 @@ function calculateSplitStats(events) {
     return {
       gp: 0, wins: 0, losses: 0, winPct: '.000',
       ppg: 0, oppg: 0, margin: 0,
-      fgPct: 0, fg3Pct: 0, ftPct: 0,
-      rpg: 0, apg: 0, topg: 0, spg: 0, bpg: 0
+      fgPct: 0, fg3Pct: 0, ftPct: 0, efgPct: '-', ftRate: '-', threePtRate: '-',
+      rpg: 0, orpg: 0, drpg: 0, orPct: '-', drPct: '-',
+      apg: 0, topg: 0, toPct: '-', spg: 0, bpg: 0
     };
   }
   
@@ -290,7 +292,9 @@ function calculateSplitStats(events) {
   let totalFGM = 0, totalFGA = 0;
   let total3PM = 0, total3PA = 0;
   let totalFTM = 0, totalFTA = 0;
-  let totalReb = 0, totalAst = 0, totalTO = 0, totalStl = 0, totalBlk = 0;
+  let totalReb = 0, totalOReb = 0, totalDReb = 0;
+  let totalAst = 0, totalTO = 0, totalStl = 0, totalBlk = 0;
+  let totalOppOReb = 0, totalOppDReb = 0;
   
   completed.forEach(eventData => {
     const event = eventData.event;
@@ -328,11 +332,31 @@ function calculateSplitStats(events) {
     totalFTA += fta;
     
     totalReb += parseInt(stats.treb) || 0;
+    totalOReb += parseInt(stats.oreb) || 0;
+    totalDReb += parseInt(stats.dreb) || 0;
     totalAst += parseInt(stats.ast) || 0;
     totalTO += parseInt(stats.to) || 0;
     totalStl += parseInt(stats.stl) || 0;
     totalBlk += parseInt(stats.blk) || 0;
+    
+    // Opponent rebounds (for rebounding percentages)
+    totalOppOReb += parseInt(stats.opporeb) || 0;
+    totalOppDReb += parseInt(stats.oppdreb) || 0;
   });
+  
+  // Calculate advanced stats
+  const efgPct = totalFGA > 0 ? (((totalFGM + 0.5 * total3PM) / totalFGA) * 100).toFixed(1) : '0.0';
+  const ftRate = totalFGA > 0 ? ((totalFTA / totalFGA) * 100).toFixed(1) : '0.0';
+  const threePtRate = totalFGA > 0 ? ((total3PA / totalFGA) * 100).toFixed(1) : '0.0';
+  
+  // Rebounding percentages (estimate - team reb / (team reb + opp reb))
+  const totalOppReb = totalOppOReb + totalOppDReb;
+  const orPct = (totalOReb + totalOppDReb) > 0 ? ((totalOReb / (totalOReb + totalOppDReb)) * 100).toFixed(1) : '-';
+  const drPct = (totalDReb + totalOppOReb) > 0 ? ((totalDReb / (totalDReb + totalOppOReb)) * 100).toFixed(1) : '-';
+  
+  // Turnover percentage (estimate - TO / Poss, where Poss ≈ FGA + 0.44*FTA + TO)
+  const estimatedPoss = totalFGA + (0.44 * totalFTA) + totalTO;
+  const toPct = estimatedPoss > 0 ? ((totalTO / estimatedPoss) * 100).toFixed(1) : '-';
   
   return {
     gp,
@@ -345,9 +369,17 @@ function calculateSplitStats(events) {
     fgPct: totalFGA > 0 ? ((totalFGM / totalFGA) * 100).toFixed(1) : '0.0',
     fg3Pct: total3PA > 0 ? ((total3PM / total3PA) * 100).toFixed(1) : '0.0',
     ftPct: totalFTA > 0 ? ((totalFTM / totalFTA) * 100).toFixed(1) : '0.0',
+    efgPct,
+    ftRate,
+    threePtRate,
     rpg: (totalReb / gp).toFixed(1),
+    orpg: (totalOReb / gp).toFixed(1),
+    drpg: (totalDReb / gp).toFixed(1),
+    orPct,
+    drPct,
     apg: (totalAst / gp).toFixed(1),
     topg: (totalTO / gp).toFixed(1),
+    toPct,
     spg: (totalStl / gp).toFixed(1),
     bpg: (totalBlk / gp).toFixed(1)
   };
@@ -407,9 +439,17 @@ function createSplitRow(split) {
     <td>${split.fgPct}</td>
     <td>${split.fg3Pct}</td>
     <td>${split.ftPct}</td>
+    <td>${split.efgPct || '-'}</td>
+    <td>${split.ftRate || '-'}</td>
+    <td>${split.threePtRate || '-'}</td>
     <td>${split.rpg}</td>
+    <td>${split.orpg || '-'}</td>
+    <td>${split.drpg || '-'}</td>
+    <td>${split.orPct || '-'}</td>
+    <td>${split.drPct || '-'}</td>
     <td>${split.apg}</td>
     <td>${split.topg}</td>
+    <td>${split.toPct || '-'}</td>
     <td>${split.spg}</td>
     <td>${split.bpg}</td>
   `;
@@ -488,19 +528,66 @@ function renderRoster() {
 function createRosterRow(player) {
   const row = document.createElement('tr');
   
+  const gp = player.gp || 1; // Avoid division by zero
   const fgPct = player.fgpt || '0.0';
   const fg3Pct = player.fgpt3 || '0.0';
   const ftPct = player.ftpt || '0.0';
   
+  // Calculate per-game stats from totals
+  const orebpg = player.oreb ? (player.oreb / gp).toFixed(1) : '-';
+  const drebpg = player.dreb ? (player.dreb / gp).toFixed(1) : '-';
+  
+  // Safely get numeric values, defaulting to 0
+  const fgm = Number(player.fgm) || 0;
+  const fgm3 = Number(player.fgm3) || 0;
+  const fga = Number(player.fga) || 0;
+  const fta = Number(player.fta) || 0;
+  const fga3 = Number(player.fga3) || 0;
+  
+  // Calculate advanced stats
+  // EFG% = (FGM + 0.5 * 3PM) / FGA
+  const efgPct = (fga > 0) 
+    ? (((fgm + 0.5 * fgm3) / fga) * 100).toFixed(1)
+    : '-';
+  
+  // FT Rate = FTA / FGA
+  const ftRate = (fga > 0)
+    ? ((fta / fga) * 100).toFixed(1)
+    : '-';
+  
+  // 3P Attempt Rate = 3PA / FGA
+  const threePtRate = (fga > 0)
+    ? ((fga3 / fga) * 100).toFixed(1)
+    : '-';
+  
+  // Store calculated values on player object for sorting
+  player.efgPct = efgPct !== '-' ? parseFloat(efgPct) : 0;
+  player.ftRate = ftRate !== '-' ? parseFloat(ftRate) : 0;
+  player.threePtRate = threePtRate !== '-' ? parseFloat(threePtRate) : 0;
+  player.orebpg = orebpg !== '-' ? parseFloat(orebpg) : 0;
+  player.drebpg = drebpg !== '-' ? parseFloat(drebpg) : 0;
+  
   row.innerHTML = `
     <td class="sticky-col">${player.fullName}</td>
     <td>${player.gp || 0}</td>
+    <td>${fgm}</td>
+    <td>${fga}</td>
+    <td>${fgm3}</td>
+    <td>${fga3}</td>
     <td>${player.ptspg || '0.0'}</td>
     <td>${player.trebpg || '0.0'}</td>
+    <td>${orebpg}</td>
+    <td>${drebpg}</td>
     <td>${player.astpg || '0.0'}</td>
+    <td>${player.stlpg || '-'}</td>
+    <td>${player.blkpg || '-'}</td>
+    <td>${player.topg || '-'}</td>
     <td>${fgPct}</td>
     <td>${fg3Pct}</td>
     <td>${ftPct}</td>
+    <td>${efgPct}</td>
+    <td>${ftRate}</td>
+    <td>${threePtRate}</td>
   `;
   
   return row;
@@ -757,12 +844,24 @@ function sortRosterTable(column) {
   // Map columns to player data fields
   const columnMap = {
     'gp': 'gp',
+    'fgm': 'fgm',
+    'fga': 'fga',
+    'fgm3': 'fgm3',
+    'fga3': 'fga3',
     'ppg': 'ptspg',
     'rpg': 'trebpg',
+    'orpg': 'orebpg',
+    'drpg': 'drebpg',
     'apg': 'astpg',
+    'spg': 'stlpg',
+    'bpg': 'blkpg',
+    'topg': 'topg',
     'fgPct': 'fgpt',
     'fg3Pct': 'fgpt3',
-    'ftPct': 'ftpt'
+    'ftPct': 'ftpt',
+    'efgPct': 'efgPct',
+    'ftRate': 'ftRate',
+    'threePtRate': 'threePtRate'
   };
   
   const field = columnMap[column];

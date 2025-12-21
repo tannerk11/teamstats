@@ -26,6 +26,10 @@ const PLAYER_COLUMNS = {
   position: { label: 'Pos', sortable: true },
   year: { label: 'Year', sortable: true },
   gp: { label: 'GP', sortable: true },
+  fgm: { label: 'FGM', sortable: true },
+  fga: { label: 'FGA', sortable: true },
+  fgm3: { label: '3PM', sortable: true },
+  fga3: { label: '3PA', sortable: true },
   ptspg: { label: 'PPG', sortable: true },
   fgmpg: { label: 'FGMPG', sortable: true },
   fgapg: { label: 'FGAPG', sortable: true },
@@ -338,6 +342,10 @@ function renderTable() {
         td.textContent = value || '';
       } else if (key === 'gp') {
         td.textContent = value || 0;
+      } else if (key === 'fgm' || key === 'fga' || key === 'fgm3' || key === 'fga3') {
+        // Total counting stats (not per game)
+        const numValue = Number(value);
+        td.textContent = !isNaN(numValue) ? Math.round(numValue) : 0;
       } else if (key === 'fgpt' || key === 'fgpt3' || key === 'ftpt') {
         // Percentage fields - already in percentage format (44.4 = 44.4%)
         const numValue = Number(value);

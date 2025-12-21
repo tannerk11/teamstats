@@ -65,7 +65,7 @@
     <!-- Splits Table Section -->
     <div id="splitsSection" style="display: none;">
       <h3>Performance Splits</h3>
-      <div class="table-container">
+      <div class="table-container" style="overflow-x: auto;">
         <table id="splitsTable">
           <thead>
             <tr>
@@ -80,9 +80,17 @@
               <th class="sortable" data-sort="fgPct">FG%</th>
               <th class="sortable" data-sort="fg3Pct">3P%</th>
               <th class="sortable" data-sort="ftPct">FT%</th>
+              <th class="sortable" data-sort="efgPct">EFG%</th>
+              <th class="sortable" data-sort="ftRate">FTR</th>
+              <th class="sortable" data-sort="threePtRate">3PAR</th>
               <th class="sortable" data-sort="rpg">RPG</th>
+              <th class="sortable" data-sort="orpg">ORPG</th>
+              <th class="sortable" data-sort="drpg">DRPG</th>
+              <th class="sortable" data-sort="orPct">OR%</th>
+              <th class="sortable" data-sort="drPct">DR%</th>
               <th class="sortable" data-sort="apg">APG</th>
               <th class="sortable" data-sort="topg">TOPG</th>
+              <th class="sortable" data-sort="toPct">TO%</th>
               <th class="sortable" data-sort="spg">SPG</th>
               <th class="sortable" data-sort="bpg">BPG</th>
             </tr>
@@ -103,18 +111,30 @@
         <button class="filter-btn" data-filter="conference">Conference Only</button>
       </div>
       
-      <div class="table-container">
+      <div class="table-container" style="overflow-x: auto;">
         <table id="rosterTable">
           <thead>
             <tr>
               <th class="sticky-col">Player</th>
               <th class="sortable" data-sort="gp">GP</th>
+              <th class="sortable" data-sort="fgm">FGM</th>
+              <th class="sortable" data-sort="fga">FGA</th>
+              <th class="sortable" data-sort="fgm3">3PM</th>
+              <th class="sortable" data-sort="fga3">3PA</th>
               <th class="sortable" data-sort="ppg">PPG</th>
               <th class="sortable" data-sort="rpg">RPG</th>
+              <th class="sortable" data-sort="orpg">ORPG</th>
+              <th class="sortable" data-sort="drpg">DRPG</th>
               <th class="sortable" data-sort="apg">APG</th>
+              <th class="sortable" data-sort="spg">SPG</th>
+              <th class="sortable" data-sort="bpg">BPG</th>
+              <th class="sortable" data-sort="topg">TOPG</th>
               <th class="sortable" data-sort="fgPct">FG%</th>
               <th class="sortable" data-sort="fg3Pct">3P%</th>
               <th class="sortable" data-sort="ftPct">FT%</th>
+              <th class="sortable" data-sort="efgPct">EFG%</th>
+              <th class="sortable" data-sort="ftRate">FTR</th>
+              <th class="sortable" data-sort="threePtRate">3PAR</th>
             </tr>
           </thead>
           <tbody id="rosterBody">

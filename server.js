@@ -60,6 +60,119 @@ async function getCachedPlayerData(season = DEFAULT_SEASON) {
   }
 }
 
+// Calculate Defensive and Offensive Strength of Schedule
+function calculateStrengthOfSchedule(statistics, teamsData, splitType, filters = null) {
+  // Create a lookup map of team name to their ratings
+  const teamRatingsMap = new Map();
+  statistics.forEach(team => {
+    teamRatingsMap.set(team.teamName, {
+      drtg: team.defensiveRating || 0,
+      ortg: team.offensiveRating || 0
+    });
+  });
+  
+  // For each team, calculate DSOS and OSOS
+  return statistics.map(team => {
+    const teamData = teamsData.find(t => {
+      const name = t.data?.attributes?.school_name || t.name;
+      return name === team.teamName;
+    });
+    
+    if (!teamData || !teamData.data || !teamData.data.events) {
+      team.dsos = 0;
+      team.osos = 0;
+      return team;
+    }
+    
+    const events = teamData.data.events || [];
+    
+    // Filter events based on split type and filters (same as used for stats)
+    const filteredEvents = events.filter(event => {
+      // Skip exhibition and pre-season games
+      const eventType = event.event?.eventType;
+      if (eventType && (eventType.code === 'preSeason' || eventType.code === 'exhibition')) {
+        return false;
+      }
+      if (eventType && eventType.statsCount === false) {
+        return false;
+      }
+      
+      // Skip if no result
+      if (!event.event?.result?.winner?.name) {
+        return false;
+      }
+      
+      // Apply split type filters
+      if (splitType === 'conference' && !event.event?.conference) {
+        return false;
+      }
+      if (splitType === 'division' && !event.event?.division) {
+        return false;
+      }
+      if (splitType === 'national' && !event.event?.national) {
+        return false;
+      }
+      
+      // Apply custom filters if provided
+      if (filters) {
+        const { home, neutralSite, conference, division, national, opponent, result } = event.event;
+        
+        // Location filter
+        if (filters.location) {
+          if (filters.location === 'home' && !home) return false;
+          if (filters.location === 'away' && (home || neutralSite)) return false;
+          if (filters.location === 'neutral' && !neutralSite) return false;
+        }
+        
+        // Competition filter
+        if (filters.competition) {
+          if (filters.competition === 'conference' && !conference) return false;
+          if (filters.competition === 'nonconference' && conference) return false;
+          if (filters.competition === 'division' && !division) return false;
+          if (filters.competition === 'national' && !national) return false;
+        }
+        
+        // Win/Loss filter
+        if (filters.winLoss) {
+          const isWin = result?.winner?.name === team.teamName;
+          if (filters.winLoss === 'wins' && !isWin) return false;
+          if (filters.winLoss === 'losses' && isWin) return false;
+        }
+        
+        // Month filter
+        if (filters.month && event.event.date) {
+          const eventDate = new Date(event.event.date);
+          const eventMonth = eventDate.getMonth() + 1; // 1-12
+          if (parseInt(filters.month) !== eventMonth) return false;
+        }
+      }
+      
+      return true;
+    });
+    
+    // Calculate DSOS and OSOS from opponent ratings
+    let totalDRTG = 0;
+    let totalORTG = 0;
+    let gamesPlayed = 0;
+    
+    filteredEvents.forEach(event => {
+      const opponentName = event.event?.opponent?.name;
+      if (opponentName && teamRatingsMap.has(opponentName)) {
+        const opponentRatings = teamRatingsMap.get(opponentName);
+        totalDRTG += opponentRatings.drtg;
+        totalORTG += opponentRatings.ortg;
+        gamesPlayed++;
+      }
+    });
+    
+    team.dsos = gamesPlayed > 0 ? totalDRTG / gamesPlayed : 0;
+    team.osos = gamesPlayed > 0 ? totalORTG / gamesPlayed : 0;
+    team.nsos = team.osos - team.dsos; // Net Strength of Schedule
+    
+    return team;
+  });
+}
+
 // API endpoint to get all team stats
 app.get('/api/stats', async (req, res) => {
   try {
@@ -80,13 +193,15 @@ app.get('/api/stats', async (req, res) => {
     
     let statistics;
     let filterInfo = { split: splitType };
+    let filters = null;
+    
     if (conference) {
       filterInfo.conference = conference;
     }
     
     // Use custom filtering if any filter params are provided
     if (useCustomFilters) {
-      const filters = {
+      filters = {
         location: req.query.location,
         competition: req.query.competition,
         winLoss: req.query.winLoss,
@@ -117,6 +232,20 @@ app.get('/api/stats', async (req, res) => {
       filterInfo = { split: splitType };
       console.log(`✅ Calculated ${statistics.length} teams with ${splitType} split`);
     }
+    
+    // Calculate Strength of Schedule (DSOS and OSOS)
+    statistics = calculateStrengthOfSchedule(statistics, teamsData, splitType, filters);
+    
+    // Remove duplicate teams (keep first occurrence)
+    const seenTeams = new Set();
+    statistics = statistics.filter(team => {
+      if (seenTeams.has(team.teamName)) {
+        return false;
+      }
+      seenTeams.add(team.teamName);
+      return true;
+    });
+    console.log(`✅ Deduplicated to ${statistics.length} unique teams`);
     
     // Set cache-control headers to prevent browser caching
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');

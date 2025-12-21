@@ -593,6 +593,32 @@ tbody tr:hover .team-name {
   background: #f7fafc;
 }
 
+/* Average row styling */
+.average-row {
+  background: #e2e8f0 !important;
+  border-top: 2px solid #cbd5e0 !important;
+  font-weight: 600;
+}
+
+.average-row:hover {
+  background: #cbd5e0 !important;
+}
+
+.average-row:hover .team-name,
+.average-row:hover .rank-cell {
+  background: #cbd5e0 !important;
+}
+
+.average-cell {
+  background: inherit !important;
+  color: #1a202c;
+}
+
+.average-row .team-name,
+.average-row .rank-cell {
+  background: #e2e8f0 !important;
+}
+
 tbody tr:nth-child(even) {
   background: #fafafa;
 }
