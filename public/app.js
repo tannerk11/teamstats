@@ -93,25 +93,28 @@ async function fetchStats(customFilters = null) {
       cache: 'no-store' // Disable browser caching
     });
     const result = await response.json();
-    const loadTime = ((performance.now() - startTime) / 1000).toFixed(2);
-    console.log(`✅ Received ${result.data.length} teams in ${loadTime}s`);
+  const loadTime = ((performance.now() - startTime) / 1000).toFixed(2);
+  console.log(`✅ Received ${result.data ? result.data.length : 0} teams in ${loadTime}s`);
     
     if (result.success) {
       allStatsData = result.data;
       columnLabels = result.columnLabels || {};
-      
+
+      // Always use the full, unfiltered data for Teams tab unless filters are applied
+      statsData = allStatsData;
+
       // Populate conference filter dropdowns
       populateConferenceFilters();
-      
+
       // Apply current conference filter
       applyConferenceFilter();
-      
+
       updateLastUpdated(result.lastUpdated);
       renderTable();
       renderCharts();
       loading.style.display = 'none';
       statsTable.style.display = 'table';
-      
+
       console.log(`⚡ Total load time: ${loadTime}s`);
     } else {
       throw new Error(result.error || 'Failed to fetch data');
