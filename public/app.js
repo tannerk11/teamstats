@@ -15,6 +15,12 @@ let currentColumns = []; // Store the current column order
 let statsChart = null; // Store chart instance
 let scatterChart = null; // Store scatter chart instance
 let reboundChart = null; // Store rebound scatter chart instance
+let adjRatingChart = null; // Store AdjDRTG vs AdjORTG chart instance
+let netRatingComparisonChart = null; // Store AdjNRTG vs NRTG chart instance
+let paceChart = null; // Store Pace vs Net Rating chart instance
+let transitionChart = null; // Store Steals vs Fast Break Points chart instance
+let assistTOChart = null; // Store Assist/TO Ratio vs Win% chart instance
+let orebChart = null; // Store OREB% vs 2nd Chance PPG chart instance
 let currentChartStat = 'netRating'; // Current stat to display
 let currentConference = ''; // Current conference filter
 let currentSeason = ''; // Current season filter
@@ -143,14 +149,14 @@ function updateLastUpdated(timestamp) {
 function renderTable() {
   if (statsData.length === 0) return;
   
-  // Add net rating rank to each team
-  const teamsWithNetRating = statsData
-    .map((team, index) => ({ team, value: team.netRating, originalIndex: index }))
+  // Add rank based on Adjusted Net Rating (adjNTRG) - the best measure of team strength
+  const teamsWithAdjNTRG = statsData
+    .map((team, index) => ({ team, value: team.adjNTRG, originalIndex: index }))
     .filter(item => item.value != null && !isNaN(item.value))
-    .sort((a, b) => b.value - a.value); // Sort by netRating descending (higher is better)
+    .sort((a, b) => b.value - a.value); // Sort by adjNTRG descending (higher is better)
   
-  // Assign net rating rank to each team
-  teamsWithNetRating.forEach((item, rank) => {
+  // Assign rank to each team based on adjNTRG
+  teamsWithAdjNTRG.forEach((item, rank) => {
     statsData[item.originalIndex].netRatingRank = rank + 1;
   });
   
@@ -570,6 +576,12 @@ function renderCharts() {
   renderStatsChart(currentChartStat);
   renderScatterChart();
   renderReboundChart();
+  renderAdjRatingChart();
+  renderNetRatingComparisonChart();
+  renderPaceChart();
+  renderTransitionChart();
+  renderAssistTOChart();
+  renderOrebChart();
 }
 
 // Render Dynamic Stats Bar Chart
@@ -952,6 +964,704 @@ function renderReboundChart() {
   });
 }
 
+// Render AdjDRTG vs AdjORTG Scatterplot
+function renderAdjRatingChart() {
+  const ctx = document.getElementById('adjRatingChart');
+  if (!ctx) return;
+  
+  // Destroy existing chart if it exists
+  if (adjRatingChart) {
+    adjRatingChart.destroy();
+  }
+  
+  // Prepare data for scatter plot - X is AdjORTG, Y is AdjDRTG (inverted because lower DRTG is better)
+  const scatterData = statsData.map(team => ({
+    x: parseFloat(team.adjORTG) || 0,
+    y: parseFloat(team.adjDRTG) || 0,
+    label: team.teamName
+  }));
+  
+  // Calculate mean values for center lines
+  const meanX = scatterData.reduce((sum, point) => sum + point.x, 0) / scatterData.length;
+  const meanY = scatterData.reduce((sum, point) => sum + point.y, 0) / scatterData.length;
+  
+  // Plugin to draw center lines
+  const centerLinesPlugin = {
+    id: 'centerLinesAdjRating',
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+      
+      // Draw vertical center line (mean X)
+      const xPos = x.getPixelForValue(meanX);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(xPos, top);
+      ctx.lineTo(xPos, bottom);
+      ctx.stroke();
+      ctx.restore();
+      
+      // Draw horizontal center line (mean Y)
+      const yPos = y.getPixelForValue(meanY);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(left, yPos);
+      ctx.lineTo(right, yPos);
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+  
+  adjRatingChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Teams',
+        data: scatterData,
+        backgroundColor: 'rgba(0, 110, 49, 0.6)',
+        borderColor: 'rgba(0, 110, 49, 1)',
+        borderWidth: 2,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const point = context.raw;
+              return `${point.label}: AdjORTG ${point.x.toFixed(1)}, AdjDRTG ${point.y.toFixed(1)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Adjusted Offensive Rating (higher = better)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        },
+        y: {
+          reverse: true, // Lower DRTG is better, so reverse axis
+          title: {
+            display: true,
+            text: 'Adjusted Defensive Rating (lower = better)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        }
+      }
+    },
+    plugins: [centerLinesPlugin]
+  });
+}
+
+// Render AdjNRTG vs NRTG Scatterplot (comparison of raw vs adjusted)
+function renderNetRatingComparisonChart() {
+  const ctx = document.getElementById('netRatingComparisonChart');
+  if (!ctx) return;
+  
+  // Destroy existing chart if it exists
+  if (netRatingComparisonChart) {
+    netRatingComparisonChart.destroy();
+  }
+  
+  // Prepare data for scatter plot - X is raw NRTG, Y is adjusted NRTG
+  const scatterData = statsData.map(team => ({
+    x: parseFloat(team.netRating) || 0,
+    y: parseFloat(team.adjNTRG) || 0,
+    label: team.teamName
+  }));
+  
+  // Find min and max for the diagonal line
+  const allValues = scatterData.flatMap(d => [d.x, d.y]);
+  const minVal = Math.min(...allValues) - 5;
+  const maxVal = Math.max(...allValues) + 5;
+  
+  // Plugin to draw diagonal reference line (y = x, where adj = raw)
+  const diagonalLinePlugin = {
+    id: 'diagonalLine',
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+      
+      // Draw diagonal line where adjNRTG = NRTG (no adjustment)
+      const startX = x.getPixelForValue(minVal);
+      const startY = y.getPixelForValue(minVal);
+      const endX = x.getPixelForValue(maxVal);
+      const endY = y.getPixelForValue(maxVal);
+      
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+  
+  netRatingComparisonChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Teams',
+        data: scatterData,
+        backgroundColor: 'rgba(110, 49, 0, 0.6)',
+        borderColor: 'rgba(110, 49, 0, 1)',
+        borderWidth: 2,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const point = context.raw;
+              const diff = (point.y - point.x).toFixed(1);
+              const diffStr = diff > 0 ? `+${diff}` : diff;
+              return `${point.label}: Raw ${point.x.toFixed(1)} → Adj ${point.y.toFixed(1)} (${diffStr})`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Raw Net Rating (NRTG)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Adjusted Net Rating (AdjNRTG)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        }
+      }
+    },
+    plugins: [diagonalLinePlugin]
+  });
+}
+
+// Render Pace vs Net Rating Scatterplot
+function renderPaceChart() {
+  const ctx = document.getElementById('paceChart');
+  if (!ctx) return;
+  
+  // Destroy existing chart if it exists
+  if (paceChart) {
+    paceChart.destroy();
+  }
+  
+  // Prepare data for scatter plot - X is possessions per game (pace), Y is net rating
+  const scatterData = statsData.map(team => ({
+    x: parseFloat(team.possessionsPerGame) || 0,
+    y: parseFloat(team.netRating) || 0,
+    label: team.teamName
+  })).filter(d => d.x > 0); // Filter out teams with no pace data
+  
+  // Calculate mean values for center lines
+  const meanX = scatterData.reduce((sum, point) => sum + point.x, 0) / scatterData.length;
+  const meanY = scatterData.reduce((sum, point) => sum + point.y, 0) / scatterData.length;
+  
+  // Plugin to draw center lines
+  const centerLinesPlugin = {
+    id: 'centerLinesPace',
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+      
+      // Draw vertical center line (mean X)
+      const xPos = x.getPixelForValue(meanX);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(xPos, top);
+      ctx.lineTo(xPos, bottom);
+      ctx.stroke();
+      ctx.restore();
+      
+      // Draw horizontal center line (mean Y = 0 for net rating)
+      const yPos = y.getPixelForValue(0);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(left, yPos);
+      ctx.lineTo(right, yPos);
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+  
+  paceChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Teams',
+        data: scatterData,
+        backgroundColor: 'rgba(128, 0, 128, 0.6)',
+        borderColor: 'rgba(128, 0, 128, 1)',
+        borderWidth: 2,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const point = context.raw;
+              return `${point.label}: ${point.x.toFixed(1)} poss/game, ${point.y > 0 ? '+' : ''}${point.y.toFixed(1)} NRTG`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Pace (Possessions per Game)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Net Rating',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        }
+      }
+    },
+    plugins: [centerLinesPlugin]
+  });
+}
+
+// Render Steals vs Fast Break Points Scatterplot
+function renderTransitionChart() {
+  const ctx = document.getElementById('transitionChart');
+  if (!ctx) return;
+  
+  // Destroy existing chart if it exists
+  if (transitionChart) {
+    transitionChart.destroy();
+  }
+  
+  // Prepare data for scatter plot - X is steals per game, Y is fast break points per game
+  const scatterData = statsData.map(team => ({
+    x: parseFloat(team.stlpg) || 0,
+    y: parseFloat(team.ptsfastbpg) || 0,
+    label: team.teamName
+  })).filter(d => d.x > 0 && d.y > 0); // Filter out teams with no data
+  
+  // Calculate mean values for center lines
+  const meanX = scatterData.reduce((sum, point) => sum + point.x, 0) / scatterData.length;
+  const meanY = scatterData.reduce((sum, point) => sum + point.y, 0) / scatterData.length;
+  
+  // Plugin to draw center lines
+  const centerLinesPlugin = {
+    id: 'centerLinesTransition',
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+      
+      // Draw vertical center line (mean X)
+      const xPos = x.getPixelForValue(meanX);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(xPos, top);
+      ctx.lineTo(xPos, bottom);
+      ctx.stroke();
+      ctx.restore();
+      
+      // Draw horizontal center line (mean Y)
+      const yPos = y.getPixelForValue(meanY);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(left, yPos);
+      ctx.lineTo(right, yPos);
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+  
+  transitionChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Teams',
+        data: scatterData,
+        backgroundColor: 'rgba(220, 20, 60, 0.6)',
+        borderColor: 'rgba(220, 20, 60, 1)',
+        borderWidth: 2,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const point = context.raw;
+              return `${point.label}: ${point.x.toFixed(1)} SPG, ${point.y.toFixed(1)} Fast Break PPG`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Steals per Game',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Fast Break Points per Game',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        }
+      }
+    },
+    plugins: [centerLinesPlugin]
+  });
+}
+
+// Render Assist/TO Ratio vs Win% Scatterplot
+// Render Pace vs AdjNRTG Scatterplot
+function renderAssistTOChart() {
+  const ctx = document.getElementById('assistTOChart');
+  if (!ctx) return;
+  
+  // Destroy existing chart if it exists
+  if (assistTOChart) {
+    assistTOChart.destroy();
+  }
+  
+  // Prepare data for scatter plot - X is Pace, Y is AdjNRTG
+  const scatterData = statsData.map(team => ({
+    x: parseFloat(team.possessionsPerGame) || 0,
+    y: parseFloat(team.adjNTRG) || 0,
+    label: team.teamName
+  })).filter(d => d.x > 0); // Filter out teams with no pace data
+  
+  // Calculate mean values for center lines
+  const meanX = scatterData.reduce((sum, point) => sum + point.x, 0) / scatterData.length;
+  const meanY = 0; // Use 0 for AdjNRTG (average team)
+  
+  // Plugin to draw center lines
+  const centerLinesPlugin = {
+    id: 'centerLinesAdjPace',
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+      
+      // Draw vertical center line (mean pace)
+      const xPos = x.getPixelForValue(meanX);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(xPos, top);
+      ctx.lineTo(xPos, bottom);
+      ctx.stroke();
+      ctx.restore();
+      
+      // Draw horizontal center line (0 AdjNRTG = average)
+      const yPos = y.getPixelForValue(meanY);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(left, yPos);
+      ctx.lineTo(right, yPos);
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+  
+  assistTOChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Teams',
+        data: scatterData,
+        backgroundColor: 'rgba(0, 128, 128, 0.6)',
+        borderColor: 'rgba(0, 128, 128, 1)',
+        borderWidth: 2,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const point = context.raw;
+              return `${point.label}: ${point.x.toFixed(1)} poss/game, ${point.y > 0 ? '+' : ''}${point.y.toFixed(1)} AdjNRTG`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Pace (Possessions per Game)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Adjusted Net Rating (AdjNRTG)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        }
+      }
+    },
+    plugins: [centerLinesPlugin]
+  });
+}
+
+// Render OREB% vs 2nd Chance PPG Scatterplot
+function renderOrebChart() {
+  const ctx = document.getElementById('orebPtsChart');
+  if (!ctx) return;
+  
+  // Destroy existing chart if it exists
+  if (orebChart) {
+    orebChart.destroy();
+  }
+  
+  // Prepare data for scatter plot - X is offensive rebound %, Y is 2nd chance points per game
+  const scatterData = statsData.map(team => ({
+    x: parseFloat(team.orPct) || 0,
+    y: parseFloat(team.ptsch2pg) || 0,
+    label: team.teamName
+  })).filter(d => d.x > 0 && d.y > 0); // Filter out teams with no data
+  
+  // Calculate mean values for center lines
+  const meanX = scatterData.reduce((sum, point) => sum + point.x, 0) / scatterData.length;
+  const meanY = scatterData.reduce((sum, point) => sum + point.y, 0) / scatterData.length;
+  
+  // Plugin to draw center lines
+  const centerLinesPlugin = {
+    id: 'centerLinesOreb',
+    afterDatasetsDraw(chart) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+      
+      // Draw vertical center line (mean X)
+      const xPos = x.getPixelForValue(meanX);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(xPos, top);
+      ctx.lineTo(xPos, bottom);
+      ctx.stroke();
+      ctx.restore();
+      
+      // Draw horizontal center line (mean Y)
+      const yPos = y.getPixelForValue(meanY);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(left, yPos);
+      ctx.lineTo(right, yPos);
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+  
+  orebChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Teams',
+        data: scatterData,
+        backgroundColor: 'rgba(255, 140, 0, 0.6)',
+        borderColor: 'rgba(255, 140, 0, 1)',
+        borderWidth: 2,
+        pointRadius: 8,
+        pointHoverRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const point = context.raw;
+              return `${point.label}: ${point.x.toFixed(1)}% OREB, ${point.y.toFixed(1)} 2nd Chance PPG`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Offensive Rebound Percentage (%)',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          },
+          ticks: {
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: '2nd Chance Points per Game',
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        }
+      }
+    },
+    plugins: [centerLinesPlugin]
+  });
+}
+
 // Auto-refresh at midnight
 function scheduleNextRefresh() {
   const now = new Date();
@@ -1024,46 +1734,13 @@ function applyConferenceFilter() {
     statsData = filteredData;
   }
   
-  // Calculate adjusted ratings
-  calculateAdjustedRatings();
+  // Note: Adjusted ratings (adjORTG, adjDRTG, adjNTRG) are now calculated server-side
+  // using additive adjustment method for stability
 }
 
-function calculateAdjustedRatings() {
-  // Calculate average DRTG and average ORTG across all teams
-  const validTeams = statsData.filter(team => 
-    team.offensiveRating != null && 
-    team.defensiveRating != null && 
-    team.dsos != null && 
-    team.osos != null &&
-    team.dsos > 0 &&
-    team.osos > 0
-  );
-  
-  if (validTeams.length === 0) return;
-  
-  const avgDRTG = validTeams.reduce((sum, team) => sum + team.defensiveRating, 0) / validTeams.length;
-  const avgORTG = validTeams.reduce((sum, team) => sum + team.offensiveRating, 0) / validTeams.length;
-  
-  // Calculate adjusted ratings for each team
-  statsData.forEach(team => {
-    if (team.offensiveRating != null && team.defensiveRating != null && 
-        team.dsos != null && team.osos != null &&
-        team.dsos > 0 && team.osos > 0) {
-      // AdjORTG = ORTG x (Average DRTG / DSOS)
-      team.adjORTG = team.offensiveRating * (avgDRTG / team.dsos);
-      
-      // AdjDRTG = DRTG x (Average ORTG / OSOS)
-      team.adjDRTG = team.defensiveRating * (avgORTG / team.osos);
-      
-      // AdjNTRG = AdjORTG - AdjDRTG
-      team.adjNTRG = team.adjORTG - team.adjDRTG;
-    } else {
-      team.adjORTG = null;
-      team.adjDRTG = null;
-      team.adjNTRG = null;
-    }
-  });
-}
+// REMOVED: calculateAdjustedRatings() - now handled server-side with additive method
+// The old multiplicative formula was: adjORTG = ORTG * (avgDRTG / dsos)
+// The new additive formula is: adjORTG = ORTG + (0.4 * scheduleStrength)
 
 // Conference filter change handler
 document.getElementById('conferenceCustomFilter').addEventListener('change', (e) => {

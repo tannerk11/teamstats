@@ -360,7 +360,11 @@ h1 {
   align-items: flex-start;
   flex-wrap: wrap;
   max-width: calc(1400px - 60px);
-  margin: 0 auto;
+  margin: 0 auto 40px auto;
+}
+
+.scatter-charts-row:last-child {
+  margin-bottom: 0;
 }
 
 .scatter-chart-container {
@@ -925,4 +929,61 @@ tr.loss-row:hover {
     flex-direction: column;
     gap: 8px;
   }
+}
+
+/* Stats Explanations Section */
+.stats-explanations {
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 0 24px 40px;
+}
+
+.stats-explanations h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.explanation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.explanation-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.explanation-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #00316E;
+  margin-bottom: 10px;
+}
+
+.explanation-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4a5568;
+}
+
+.explanation-card strong {
+  color: #1a202c;
+}
+
+.methodology-note {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4a5568;
+  background: #edf2f7;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border-left: 4px solid #00316E;
+  margin-bottom: 20px;
 }

@@ -148,9 +148,99 @@
           </div>
         </div>
       </div>
+      
+      <!-- Second row of scatter charts -->
+      <div class="scatter-charts-row">
+        <div class="chart-container scatter-chart-container">
+          <div class="chart-header">
+            <h2>AdjDRTG vs AdjORTG</h2>
+          </div>
+          <div class="scatter-chart-wrapper">
+            <canvas id="adjRatingChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-container scatter-chart-container">
+          <div class="chart-header">
+            <h2>Raw vs Adjusted Net Rating</h2>
+          </div>
+          <div class="scatter-chart-wrapper">
+            <canvas id="netRatingComparisonChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Third row of scatter charts -->
+      <div class="scatter-charts-row">
+        <div class="chart-container scatter-chart-container">
+          <div class="chart-header">
+            <h2>Pace vs Net Rating</h2>
+          </div>
+          <div class="scatter-chart-wrapper">
+            <canvas id="paceChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-container scatter-chart-container">
+          <div class="chart-header">
+            <h2>Steals vs Fast Break Points</h2>
+          </div>
+          <div class="scatter-chart-wrapper">
+            <canvas id="transitionChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Fourth row of scatter charts -->
+      <div class="scatter-charts-row">
+        <div class="chart-container scatter-chart-container">
+          <div class="chart-header">
+            <h2>Pace vs AdjNRTG</h2>
+          </div>
+          <div class="scatter-chart-wrapper">
+            <canvas id="assistTOChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-container scatter-chart-container">
+          <div class="chart-header">
+            <h2>OREB% vs 2nd Chance Points</h2>
+          </div>
+          <div class="scatter-chart-wrapper">
+            <canvas id="orebPtsChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Explanations -->
+    <div class="stats-explanations">
+      <h3>Understanding Advanced Stats</h3>
+      <p class="methodology-note">These ratings use an <strong>iterative adjustment method</strong> inspired by KenPom. Instead of calculating adjustments just once, the system runs <strong>5 rounds of recalculation</strong>. Each round, every team's adjusted rating is updated using their opponents' adjusted ratings from the previous round. This creates a chain reaction: beating a team with a tough schedule is worth more than beating a team with an easy schedule, and that "tough schedule" itself accounts for <em>their</em> opponents' schedules, and so on.</p>
+      
+      <div class="explanation-grid">
+        <div class="explanation-card">
+          <h4>NSOS (Net Strength of Schedule)</h4>
+          <p>How tough were your opponents? A <strong>positive NSOS</strong> means you faced strong teams; <strong>negative</strong> means easier opponents. The magic of iteration: this uses your opponents' <em>adjusted</em> ratings, which factor in <em>their</em> opponents' strength. So if you played Team A, and Team A played a brutal schedule, your NSOS reflects that — it's "strength of schedule of strength of schedule" baked in automatically.</p>
+        </div>
+        <div class="explanation-card">
+          <h4>AdjORTG (Adjusted Offensive Rating)</h4>
+          <p>How good is your offense after accounting for opponent defense quality? Here's where iteration matters: if you scored 80 on Team B, and Team B's defense looks good because <em>they</em> faced great offenses, you get extra credit. Each of the 5 rounds refines this further. By round 5, this number reflects your true offensive ability against an average opponent.</p>
+        </div>
+        <div class="explanation-card">
+          <h4>AdjDRTG (Adjusted Defensive Rating)</h4>
+          <p>How good is your defense? <strong>Lower is better.</strong> If you held Team C to 60 points, and Team C's offense is rated highly because <em>they</em> scored well against tough defenses, your defensive rating improves. The iterative process runs 5 times to ensure the adjustment fully captures the ripple effects of opponent quality throughout the league.</p>
+        </div>
+        <div class="explanation-card">
+          <h4>AdjNRTG (Adjusted Net Rating)</h4>
+          <p>The bottom line: <strong>AdjORTG minus AdjDRTG</strong>. After 5 iterations of refinement, this single number captures a team's true strength. Positive means you're better than average; negative means below average. This is the best stat for comparing any two teams, because it accounts for schedule difficulty at every level — your opponents, their opponents, and beyond.</p>
+        </div>
+      </div>
+      
+      <p class="methodology-note" style="margin-top: 16px; font-size: 13px;"><strong>Why iterate 5 times?</strong> Round 1 adjusts for opponent strength. Round 2 adjusts for opponent's opponents. By round 5, the math has settled ("converged") and captures the full chain of schedule effects. Think of it like ripples in a pond — each round lets the ripples spread further until the water is calm. This is the same approach used by KenPom and other trusted rating systems.</p>
     </div>
   </div>
 
-  <script src="app.js?v=22"></script>
+  <script src="app.js?v=31"></script>
 </body>
 </html>

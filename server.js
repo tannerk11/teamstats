@@ -7,7 +7,7 @@ import { SEASONS, DEFAULT_SEASON } from './config/seasons.js';
 import { fetchAllTeams } from './lib/dataFetcher.js';
 import { calculateCustomStats, calculateAdvancedStats } from './lib/calculator.js';
 import { COLUMN_LABELS } from './lib/columnLabels.js';
-import { getFilteredTeamStats } from './lib/eventFilter.js';
+import { getFilteredTeamStats, filterEvents } from './lib/eventFilter.js';
 import { fetchAllPlayerData, filterPlayers, getFilterOptions } from './lib/playerDataFetcher.js';
 
 const app = express();
@@ -60,8 +60,224 @@ async function getCachedPlayerData(season = DEFAULT_SEASON) {
   }
 }
 
-// Calculate Defensive and Offensive Strength of Schedule
-function calculateStrengthOfSchedule(statistics, teamsData, splitType, filters = null) {
+/**
+ * Calculate Strength of Schedule adjustments using iterative method (KenPom-style)
+ * Runs multiple iterations to account for opponent's opponent strength
+ * @param {Array} statistics - Array of team statistics objects
+ * @param {Array} teamsData - Array of team data with events
+ * @param {string} splitType - Type of split (conference, overall, etc.)
+ * @param {Object} filters - Optional filters applied to events
+ * @returns {Array} statistics with SOS fields added
+ */
+function calculateStrengthOfScheduleAdditive(statistics, teamsData, splitType, filters = null) {
+  const ITERATIONS = 5; // Number of iterations for convergence (KenPom uses similar)
+  const DAMPENING_FACTOR = 0.4; // How much schedule strength affects ratings
+  
+  // Calculate league averages (these stay constant)
+  const leagueAvgORTG = statistics.reduce((sum, t) => sum + (t.offensiveRating || 0), 0) / statistics.length;
+  const leagueAvgDRTG = statistics.reduce((sum, t) => sum + (t.defensiveRating || 0), 0) / statistics.length;
+  
+  console.log(`📊 League Averages: ORTG=${leagueAvgORTG.toFixed(1)}, DRTG=${leagueAvgDRTG.toFixed(1)}`);
+  
+  // Build opponent list for each team (do this once, reuse in iterations)
+  const teamOpponents = new Map();
+  const teamRawRatings = new Map();
+  
+  // Create a normalized name lookup for fuzzy matching
+  // This handles cases like "Montana Tech (MT)" vs "Montana Tech"
+  const normalizedNameMap = new Map();
+  
+  statistics.forEach(team => {
+    // Store raw ratings by exact name
+    teamRawRatings.set(team.teamName, {
+      ortg: team.offensiveRating || 0,
+      drtg: team.defensiveRating || 0,
+      nrtg: team.netRating || 0
+    });
+    
+    // Also store by normalized name (without state abbreviation)
+    const baseName = team.teamName.replace(/\s*\([A-Za-z.]+\)\s*$/, '').trim();
+    normalizedNameMap.set(baseName.toLowerCase(), team.teamName);
+    normalizedNameMap.set(team.teamName.toLowerCase(), team.teamName);
+  });
+  
+  // Helper function to find matching team name
+  function findMatchingTeam(oppName) {
+    if (!oppName) return null;
+    
+    // Exact match
+    if (teamRawRatings.has(oppName)) return oppName;
+    
+    // Try lowercase exact match
+    const lowerOppName = oppName.toLowerCase();
+    if (normalizedNameMap.has(lowerOppName)) {
+      return normalizedNameMap.get(lowerOppName);
+    }
+    
+    // Try without state abbreviation
+    const baseName = oppName.replace(/\s*\([A-Za-z.]+\)\s*$/, '').trim().toLowerCase();
+    if (normalizedNameMap.has(baseName)) {
+      return normalizedNameMap.get(baseName);
+    }
+    
+    return null;
+  }
+  
+  statistics.forEach(team => {
+    // Find opponents
+    const teamData = teamsData.find(t => {
+      const name = t.data?.attributes?.school_name || t.name;
+      return name === team.teamName;
+    });
+    
+    if (!teamData || !teamData.data || !teamData.data.events) {
+      teamOpponents.set(team.teamName, []);
+      return;
+    }
+    
+    const events = teamData.data.events || [];
+    
+    // Build filter object for filterEvents
+    const eventFilters = { ...filters };
+    if (splitType === 'conference') {
+      eventFilters.competition = 'conference';
+    } else if (splitType === 'division') {
+      eventFilters.competition = 'division';
+    } else if (splitType === 'national') {
+      eventFilters.competition = 'national';
+    }
+    
+    // Get filtered events and extract opponent names
+    const filteredEvents = filterEvents(events, eventFilters, team.teamName);
+    const allOpponentNames = filteredEvents.map(event => event.event?.opponent?.name).filter(Boolean);
+    
+    // Use fuzzy matching to find opponents in our ratings
+    const teamNamesSet = new Set(teamRawRatings.keys());
+    const matchedOpponents = allOpponentNames
+      .map(name => findMatchingTeam(name, teamNamesSet))
+      .filter(Boolean);
+    
+    // Debug: log first team's opponent matching
+    if (team.teamName === 'Eastern Oregon' || team.teamName === 'Bushnell (OR)') {
+      console.log(`  ${team.teamName}: ${allOpponentNames.length} opponents in events, ${matchedOpponents.length} matched in ratings`);
+      if (matchedOpponents.length === 0 && allOpponentNames.length > 0) {
+        console.log(`    Sample unmatched: ${allOpponentNames.slice(0, 3).join(', ')}`);
+        console.log(`    Sample team names: ${Array.from(teamRawRatings.keys()).slice(0, 3).join(', ')}`);
+      } else if (matchedOpponents.length > 0) {
+        console.log(`    Sample matched: ${matchedOpponents.slice(0, 3).join(', ')}`);
+      }
+    }
+    
+    teamOpponents.set(team.teamName, matchedOpponents);
+  });
+  
+  // Initialize adjusted ratings with raw ratings
+  let currentAdjusted = new Map();
+  statistics.forEach(team => {
+    currentAdjusted.set(team.teamName, {
+      adjORTG: team.offensiveRating || 0,
+      adjDRTG: team.defensiveRating || 0,
+      adjNTRG: team.netRating || 0
+    });
+  });
+  
+  // Run iterative adjustment
+  for (let iteration = 0; iteration < ITERATIONS; iteration++) {
+    const newAdjusted = new Map();
+    
+    statistics.forEach(team => {
+      const opponents = teamOpponents.get(team.teamName) || [];
+      const rawRatings = teamRawRatings.get(team.teamName);
+      
+      if (opponents.length === 0) {
+        // No opponents, keep raw ratings
+        newAdjusted.set(team.teamName, {
+          adjORTG: rawRatings.ortg,
+          adjDRTG: rawRatings.drtg,
+          adjNTRG: rawRatings.nrtg,
+          osos: leagueAvgORTG,
+          dsos: leagueAvgDRTG,
+          nsos: 0
+        });
+        return;
+      }
+      
+      // Calculate opponent averages using CURRENT ADJUSTED ratings
+      let totalOppAdjORTG = 0;
+      let totalOppAdjDRTG = 0;
+      
+      opponents.forEach(oppName => {
+        const oppAdj = currentAdjusted.get(oppName);
+        if (oppAdj) {
+          totalOppAdjORTG += oppAdj.adjORTG;
+          totalOppAdjDRTG += oppAdj.adjDRTG;
+        }
+      });
+      
+      const avgOppAdjORTG = totalOppAdjORTG / opponents.length;
+      const avgOppAdjDRTG = totalOppAdjDRTG / opponents.length;
+      
+      // Calculate schedule strength based on adjusted opponent ratings
+      // For offense: tough defenses (low adjDRTG) = positive strength
+      const offensiveScheduleStrength = leagueAvgDRTG - avgOppAdjDRTG;
+      // For defense: tough offenses (high adjORTG) = positive strength  
+      const defensiveScheduleStrength = avgOppAdjORTG - leagueAvgORTG;
+      
+      // Apply adjustment to RAW ratings (not cumulative)
+      const adjORTG = rawRatings.ortg + (DAMPENING_FACTOR * offensiveScheduleStrength);
+      const adjDRTG = rawRatings.drtg - (DAMPENING_FACTOR * defensiveScheduleStrength);
+      const adjNTRG = adjORTG - adjDRTG;
+      
+      newAdjusted.set(team.teamName, {
+        adjORTG,
+        adjDRTG,
+        adjNTRG,
+        osos: avgOppAdjORTG,
+        dsos: avgOppAdjDRTG,
+        nsos: avgOppAdjORTG - avgOppAdjDRTG
+      });
+    });
+    
+    // Update current adjusted for next iteration
+    currentAdjusted = newAdjusted;
+    
+    // Log convergence progress
+    if (iteration === 0 || iteration === ITERATIONS - 1) {
+      const sample = statistics[0];
+      const adj = currentAdjusted.get(sample?.teamName);
+      if (adj) {
+        console.log(`  Iteration ${iteration + 1}: ${sample.teamName} adjNTRG=${adj.adjNTRG.toFixed(2)}`);
+      }
+    }
+  }
+  
+  console.log(`✅ Completed ${ITERATIONS} iterations for SOS adjustment`);
+  
+  // Apply final adjusted values to statistics
+  return statistics.map(team => {
+    const adj = currentAdjusted.get(team.teamName);
+    if (adj) {
+      team.adjORTG = adj.adjORTG;
+      team.adjDRTG = adj.adjDRTG;
+      team.adjNTRG = adj.adjNTRG;
+      team.osos = adj.osos;
+      team.dsos = adj.dsos;
+      team.nsos = adj.nsos;
+    } else {
+      team.adjORTG = team.offensiveRating;
+      team.adjDRTG = team.defensiveRating;
+      team.adjNTRG = team.netRating;
+      team.osos = leagueAvgORTG;
+      team.dsos = leagueAvgDRTG;
+      team.nsos = 0;
+    }
+    return team;
+  });
+}
+
+// OLD FUNCTION - KEEP FOR REFERENCE/ROLLBACK
+// Calculate Defensive and Offensive Strength of Schedule (Multiplicative method)
+function calculateStrengthOfScheduleMultiplicative(statistics, teamsData, splitType, filters = null) {
   // Create a lookup map of team name to their ratings
   const teamRatingsMap = new Map();
   statistics.forEach(team => {
@@ -86,69 +302,19 @@ function calculateStrengthOfSchedule(statistics, teamsData, splitType, filters =
     
     const events = teamData.data.events || [];
     
-    // Filter events based on split type and filters (same as used for stats)
-    const filteredEvents = events.filter(event => {
-      // Skip exhibition and pre-season games
-      const eventType = event.event?.eventType;
-      if (eventType && (eventType.code === 'preSeason' || eventType.code === 'exhibition')) {
-        return false;
-      }
-      if (eventType && eventType.statsCount === false) {
-        return false;
-      }
-      
-      // Skip if no result
-      if (!event.event?.result?.winner?.name) {
-        return false;
-      }
-      
-      // Apply split type filters
-      if (splitType === 'conference' && !event.event?.conference) {
-        return false;
-      }
-      if (splitType === 'division' && !event.event?.division) {
-        return false;
-      }
-      if (splitType === 'national' && !event.event?.national) {
-        return false;
-      }
-      
-      // Apply custom filters if provided
-      if (filters) {
-        const { home, neutralSite, conference, division, national, opponent, result } = event.event;
-        
-        // Location filter
-        if (filters.location) {
-          if (filters.location === 'home' && !home) return false;
-          if (filters.location === 'away' && (home || neutralSite)) return false;
-          if (filters.location === 'neutral' && !neutralSite) return false;
-        }
-        
-        // Competition filter
-        if (filters.competition) {
-          if (filters.competition === 'conference' && !conference) return false;
-          if (filters.competition === 'nonconference' && conference) return false;
-          if (filters.competition === 'division' && !division) return false;
-          if (filters.competition === 'national' && !national) return false;
-        }
-        
-        // Win/Loss filter
-        if (filters.winLoss) {
-          const isWin = result?.winner?.name === team.teamName;
-          if (filters.winLoss === 'wins' && !isWin) return false;
-          if (filters.winLoss === 'losses' && isWin) return false;
-        }
-        
-        // Month filter
-        if (filters.month && event.event.date) {
-          const eventDate = new Date(event.event.date);
-          const eventMonth = eventDate.getMonth() + 1; // 1-12
-          if (parseInt(filters.month) !== eventMonth) return false;
-        }
-      }
-      
-      return true;
-    });
+    // Build filter object for filterEvents
+    // Convert splitType to competition filter (conference/division/national splits)
+    const eventFilters = { ...filters };
+    if (splitType === 'conference') {
+      eventFilters.competition = 'conference';
+    } else if (splitType === 'division') {
+      eventFilters.competition = 'division';
+    } else if (splitType === 'national') {
+      eventFilters.competition = 'national';
+    }
+    
+    // Use shared filterEvents function (handles exhibitions, pre-season, no stats, no results)
+    const filteredEvents = filterEvents(events, eventFilters, team.teamName);
     
     // Calculate DSOS and OSOS from opponent ratings
     let totalDRTG = 0;
@@ -233,9 +399,18 @@ app.get('/api/stats', async (req, res) => {
       console.log(`✅ Calculated ${statistics.length} teams with ${splitType} split`);
     }
     
-    // Calculate Strength of Schedule (DSOS and OSOS)
-    statistics = calculateStrengthOfSchedule(statistics, teamsData, splitType, filters);
+    // Calculate Strength of Schedule (DSOS, OSOS, and adjusted ratings)
+    statistics = calculateStrengthOfScheduleAdditive(statistics, teamsData, splitType, filters);
     
+    // Log sample adjustments for verification
+    console.log(`\n📊 Sample SOS Adjustments (first 3 teams):`);
+    statistics.slice(0, 3).forEach(team => {
+      console.log(`  ${team.teamName}:`);
+      console.log(`    Raw: ORTG=${team.offensiveRating?.toFixed(1)}, DRTG=${team.defensiveRating?.toFixed(1)}, NET=${team.netRating?.toFixed(1)}`);
+      console.log(`    Adj: ORTG=${team.adjORTG?.toFixed(1)}, DRTG=${team.adjDRTG?.toFixed(1)}, NET=${team.adjNTRG?.toFixed(1)}`);
+      console.log(`    SOS: opp ORTG=${team.osos?.toFixed(1)}, opp DRTG=${team.dsos?.toFixed(1)}`);
+    });
+
     // Remove duplicate teams (keep first occurrence)
     const seenTeams = new Set();
     statistics = statistics.filter(team => {
