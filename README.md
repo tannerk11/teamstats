@@ -101,6 +101,58 @@ export const COLUMN_LABELS = {
 - `npm start` - Start the production server
 - `npm run dev` - Start with auto-reload on file changes
 - `npm run pull` - Fetch and display stats in terminal
+- `npm run refresh-urls` - Refresh all team URLs from conference pages (2025-26)
+- `npm run refresh-urls:2024` - Refresh team URLs for 2024-25 season
+- `npm run refresh-urls:2025` - Refresh team URLs for 2025-26 season
+
+## Automatic URL Refresh
+
+Team data URLs on PrestoSports can change between seasons or during the season. To keep URLs current, run the refresh script periodically:
+
+```bash
+npm run refresh-urls
+```
+
+### Setting Up Automatic Refresh (Every 2 Days)
+
+**macOS (using launchd):**
+
+Create `~/Library/LaunchAgents/com.conferencestats.refresh.plist`:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.conferencestats.refresh</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/node</string>
+        <string>/Users/YOUR_USERNAME/Desktop/ConferenceStats/scripts/refreshTeamUrls.js</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>172800</integer><!-- 2 days in seconds -->
+    <key>StandardOutPath</key>
+    <string>/tmp/conferencestats-refresh.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/conferencestats-refresh-error.log</string>
+</dict>
+</plist>
+```
+
+Then load it:
+```bash
+launchctl load ~/Library/LaunchAgents/com.conferencestats.refresh.plist
+```
+
+**Linux (using cron):**
+
+Add to crontab (`crontab -e`):
+```bash
+0 3 */2 * * cd /path/to/ConferenceStats && /usr/bin/node scripts/refreshTeamUrls.js >> /tmp/refresh.log 2>&1
+```
+
+This runs at 3 AM every 2 days.
 
 ## Technologies
 

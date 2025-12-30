@@ -7,7 +7,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "pull": "node pull.js"
+    "pull": "node pull.js",
+    "refresh-urls": "node scripts/refreshTeamUrls.js",
+    "refresh-urls:2024": "node scripts/refreshTeamUrls.js 2024-25",
+    "refresh-urls:2025": "node scripts/refreshTeamUrls.js 2025-26"
   },
   "keywords": ["sports", "statistics", "conference"],
   "author": "",

@@ -10,57 +10,57 @@ export function getTeamsBySeason(season) {
 const TEAMS_2025_26 = [
   {
     name: 'Eastern Oregon',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/1stv0so5yo4dy8m6.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/r0wokrujjmtkcvga.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'College of Idaho',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/4i8ab7eu0vord9i5.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/mk254fj8gc9n14cc.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'Bushnell',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9jt4efsckjxx1mz4.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/oqp7z34vmfzzy3zk.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'Lewis-Clark State',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/63q7r68ue0e7wm4s.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/vrbtsu6uwzt25q50.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'Southern Oregon',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/d9bz792lojsrfwks.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/9kaqi8kr614flc0u.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'Corban',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/7cybomek4tlt46f2.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/go8nlwto34kyren8.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'Warner Pacific',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/bzl8n82kgtbnb3nn.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/lgjtjo7jqz8wds7k.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'Northwest',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/06kd3hu801rdnlh8.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/99u1tmq78ctapcjx.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'Oregon Tech',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/3imnxiqstibufgfg.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/lb2nyfxftszy5ax5.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'Evergreen',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/btqo7b3zslrdsf5l.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/hwtjzxxangn19pej.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
     name: 'Walla Walla',
-    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/55sgu57331e4eidf.json',
+    url: 'https://prestosports-downloads.s3.us-west-2.amazonaws.com/teamData/g0qg6pqeawhwquum.json',
     conference: 'Cascade Collegiate Conference'
   },
   {
